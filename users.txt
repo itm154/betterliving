@@ -1,0 +1,6 @@
+1|default_student|123|Student
+102443|Ariel|102443|Lecturer
+100|Jerry|1234|Student
+67|tung|69|Student
+2|ARIANA GRANDE|999|Lecturer
+102100|Michelle|12345|Student
