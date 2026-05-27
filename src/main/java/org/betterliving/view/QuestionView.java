@@ -13,11 +13,14 @@ public class QuestionView extends JFrame {
 	private int currentQuestionIndex = 0;
 	private int totalScore = 0;
 	private int maxPossibleScore = 0;
+	private int totalCorrect = 0;
 
 	private JTextArea questionArea;
 	private JPanel inputPanel;
 	private JLabel feedbackLabel;
 	private JButton nextBtn;
+	private JLabel resultLabel;
+	private JLabel finalMessageLabel;
 
 	public QuestionView(QuestionController controller) {
 		this.controller = controller;
@@ -46,15 +49,25 @@ public class QuestionView extends JFrame {
 		questionArea.setWrapStyleWord(true);
 		questionArea.setEditable(false);
 		questionArea.setFocusable(false);
-		questionArea.setFont(new Font("Arial", Font.BOLD, 18));
+		questionArea.setFont(new Font("Arial", Font.PLAIN, 20));
 		mainPanel.add(questionArea, gbc);
 
 		inputPanel = new JPanel();
 		mainPanel.add(inputPanel, gbc);
 
+		resultLabel = new JLabel("", SwingConstants.CENTER);
+		resultLabel.setFont(new Font("Arial", Font.ITALIC, 32));
+		mainPanel.add(resultLabel, gbc);
+		resultLabel.setVisible(false);
+
 		feedbackLabel = new JLabel("", SwingConstants.CENTER);
-		feedbackLabel.setFont(new Font("Arial", Font.ITALIC, 14));
+		feedbackLabel.setFont(new Font("Arial", Font.ITALIC, 20));
 		mainPanel.add(feedbackLabel, gbc);
+
+		finalMessageLabel = new JLabel("", SwingConstants.CENTER);
+		finalMessageLabel.setFont(new Font("Arial", Font.ITALIC, 22));
+		mainPanel.add(finalMessageLabel, gbc);
+		finalMessageLabel.setVisible(false);
 
 		nextBtn = new JButton("Next Question");
 		nextBtn.setVisible(false);
@@ -118,6 +131,7 @@ public class QuestionView extends JFrame {
 		boolean correct = q.validateAnswer(answer);
 		if (correct) {
 			totalScore += q.getQuestionPoints();
+			totalCorrect++;
 			feedbackLabel.setText("Correct! (+ " + q.getQuestionPoints() + " points)");
 			feedbackLabel.setForeground(new Color(0, 120, 0));
 		} else {
@@ -135,11 +149,36 @@ public class QuestionView extends JFrame {
 		inputPanel.removeAll();
 		nextBtn.setVisible(false);
 		questionArea.setText("Quiz Finished!");
+		resultLabel.setVisible(true);
+		finalMessageLabel.setVisible(true);
 
-		String scoreText = String.format("Final Score: %d / %d", totalScore, maxPossibleScore);
+		float totalPercentage = ((float) totalCorrect / 20) * 100;
+
+		String percentageText = String.format("Percentage: %.2f%%", totalPercentage);
+		resultLabel.setText(percentageText);
+		resultLabel.setForeground(new Color(0, 0, 150));
+
+		String scoreText = String.format("Score: %d / %d", totalScore, maxPossibleScore);
 		feedbackLabel.setText(scoreText);
-		feedbackLabel.setFont(new Font("Arial", Font.BOLD, 16));
+		feedbackLabel.setFont(new Font("Arial", Font.ITALIC, 28));
 		feedbackLabel.setForeground(new Color(0, 0, 150));
+
+		String finalMessage = "";
+
+		if (totalPercentage >= 80) {
+			finalMessage = "Outstanding!";
+		} else if (totalPercentage >= 60) {
+			finalMessage = "That's good!";
+		} else if (totalPercentage >= 40) {
+			finalMessage = "Good try!";
+		} else if (totalPercentage >= 20) {
+			finalMessage = "You can do better!";
+		} else {
+			finalMessage = "Don't give up!";
+		}
+
+		finalMessageLabel.setText(finalMessage);
+		resultLabel.setForeground(new Color(0, 0, 150));
 
 		JButton closeBtn = new JButton("Back to Main Menu");
 		closeBtn.addActionListener(e -> dispose());
