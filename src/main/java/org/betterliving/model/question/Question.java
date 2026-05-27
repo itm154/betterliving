@@ -2,7 +2,10 @@ package org.betterliving.model.question;
 
 import java.util.List;
 
-public abstract class Question {
+import org.betterliving.model.Identifiable;
+import org.betterliving.model.Scorable;
+
+public abstract class Question implements Identifiable, Scorable {
 	private int id;
 	private final String text;
 	private final int points;
@@ -12,10 +15,12 @@ public abstract class Question {
 		this.points = points;
 	}
 
+	@Override
 	public int getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -24,7 +29,8 @@ public abstract class Question {
 		return text;
 	}
 
-	public int getQuestionPoints() {
+	@Override
+	public int getPoints() {
 		return points;
 	}
 

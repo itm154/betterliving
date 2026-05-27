@@ -19,19 +19,17 @@ public class QuestionView extends JFrame {
 	private JPanel inputPanel;
 	private JLabel feedbackLabel;
 	private JButton nextBtn;
-	private JLabel resultLabel;
-	private JLabel finalMessageLabel;
 
 	public QuestionView(QuestionController controller) {
 		this.controller = controller;
 		this.questions = controller.getAllQuestions();
 
 		for (Question q : questions) {
-			maxPossibleScore += q.getQuestionPoints();
+			maxPossibleScore += q.getPoints();
 		}
 
 		setTitle("BetterLiving Quiz");
-		setSize(600, 400);
+		setSize(600, 450);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 
@@ -39,35 +37,29 @@ public class QuestionView extends JFrame {
 		JPanel mainPanel = new JPanel(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridwidth = GridBagConstraints.REMAINDER;
-		gbc.insets = new Insets(10, 20, 10, 20);
+		gbc.insets = new Insets(15, 20, 15, 20);
 		gbc.anchor = GridBagConstraints.CENTER;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.weightx = 1.0;
 
 		questionArea = new JTextArea("Welcome to the Quiz!");
+		questionArea.setFont(new Font("Arial", Font.BOLD, 18));
 		questionArea.setLineWrap(true);
 		questionArea.setWrapStyleWord(true);
 		questionArea.setEditable(false);
 		questionArea.setFocusable(false);
-		questionArea.setFont(new Font("Arial", Font.PLAIN, 20));
+		questionArea.setOpaque(false);
 		mainPanel.add(questionArea, gbc);
+
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.weightx = 0;
 
 		inputPanel = new JPanel();
 		mainPanel.add(inputPanel, gbc);
 
-		resultLabel = new JLabel("", SwingConstants.CENTER);
-		resultLabel.setFont(new Font("Arial", Font.ITALIC, 32));
-		mainPanel.add(resultLabel, gbc);
-		resultLabel.setVisible(false);
-
 		feedbackLabel = new JLabel("", SwingConstants.CENTER);
-		feedbackLabel.setFont(new Font("Arial", Font.ITALIC, 20));
+		feedbackLabel.setFont(new Font("Arial", Font.ITALIC, 14));
 		mainPanel.add(feedbackLabel, gbc);
-
-		finalMessageLabel = new JLabel("", SwingConstants.CENTER);
-		finalMessageLabel.setFont(new Font("Arial", Font.ITALIC, 22));
-		mainPanel.add(finalMessageLabel, gbc);
-		finalMessageLabel.setVisible(false);
 
 		nextBtn = new JButton("Next Question");
 		nextBtn.setVisible(false);
@@ -113,7 +105,7 @@ public class QuestionView extends JFrame {
 				inputPanel.add(btn);
 			}
 		} else if (q instanceof ShortAnswerQuestion) {
-			JTextField textField = new JTextField(30);
+			JTextField textField = new JTextField(25);
 			JButton submitBtn = new JButton("Submit");
 			submitBtn.addActionListener(e -> submitAnswer(q, textField.getText()));
 			inputPanel.add(textField);
@@ -125,14 +117,13 @@ public class QuestionView extends JFrame {
 	}
 
 	private void submitAnswer(Question q, String answer) {
-		// Disable input buttons/fields
 		inputPanel.setVisible(false);
 
 		boolean correct = q.validateAnswer(answer);
 		if (correct) {
-			totalScore += q.getQuestionPoints();
+			totalScore += q.getPoints();
 			totalCorrect++;
-			feedbackLabel.setText("Correct! (+ " + q.getQuestionPoints() + " points)");
+			feedbackLabel.setText("Correct! (+ " + q.getPoints() + " points)");
 			feedbackLabel.setForeground(new Color(0, 120, 0));
 		} else {
 			feedbackLabel.setText("Incorrect. The correct answer was: " + q.getCorrectAnswer());
@@ -147,38 +138,19 @@ public class QuestionView extends JFrame {
 
 	private void showResults() {
 		inputPanel.removeAll();
+		inputPanel.setVisible(true);
 		nextBtn.setVisible(false);
 		questionArea.setText("Quiz Finished!");
-		resultLabel.setVisible(true);
-		finalMessageLabel.setVisible(true);
 
-		float totalPercentage = ((float) totalCorrect / 20) * 100;
+		float percentage = questions.isEmpty() ? 0 : ((float) totalCorrect / questions.size()) * 100;
+		String finalMessage = getMotivationalMessage(percentage);
 
-		String percentageText = String.format("Percentage: %.2f%%", totalPercentage);
-		resultLabel.setText(percentageText);
-		resultLabel.setForeground(new Color(0, 0, 150));
+		String resultText = String.format(
+				"<html><center>Final Score: %d / %d<br>Questions Correct: %d / %d<br>Percentage: %.2f%%<br><br><font color='blue' size='5'>%s</font></center></html>",
+				totalScore, maxPossibleScore, totalCorrect, questions.size(), percentage, finalMessage);
 
-		String scoreText = String.format("Score: %d / %d", totalScore, maxPossibleScore);
-		feedbackLabel.setText(scoreText);
-		feedbackLabel.setFont(new Font("Arial", Font.ITALIC, 28));
-		feedbackLabel.setForeground(new Color(0, 0, 150));
-
-		String finalMessage = "";
-
-		if (totalPercentage >= 80) {
-			finalMessage = "Outstanding!";
-		} else if (totalPercentage >= 60) {
-			finalMessage = "That's good!";
-		} else if (totalPercentage >= 40) {
-			finalMessage = "Good try!";
-		} else if (totalPercentage >= 20) {
-			finalMessage = "You can do better!";
-		} else {
-			finalMessage = "Don't give up!";
-		}
-
-		finalMessageLabel.setText(finalMessage);
-		resultLabel.setForeground(new Color(0, 0, 150));
+		feedbackLabel.setText(resultText);
+		feedbackLabel.setFont(new Font("Arial", Font.BOLD, 16));
 
 		JButton closeBtn = new JButton("Back to Main Menu");
 		closeBtn.addActionListener(e -> dispose());
@@ -186,5 +158,17 @@ public class QuestionView extends JFrame {
 
 		inputPanel.revalidate();
 		inputPanel.repaint();
+	}
+
+	private String getMotivationalMessage(float percentage) {
+		if (percentage >= 80)
+			return "Outstanding!";
+		if (percentage >= 60)
+			return "That's good!";
+		if (percentage >= 40)
+			return "Good try!";
+		if (percentage >= 20)
+			return "You can do better!";
+		return "Don't give up!";
 	}
 }

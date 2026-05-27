@@ -21,7 +21,7 @@ public class QuestionListView extends JFrame {
 
 		for (Question q : questions) {
 			boolean isMCQ = q.getQuestionType().equals("MC");
-			Object[] row = { q.getQuestionType(), q.getQuestionPoints(), q.getQuestionText(),
+			Object[] row = { q.getQuestionType(), q.getPoints(), q.getQuestionText(),
 					isMCQ ? q.getOptions() : "-",
 					q.getCorrectAnswer() };
 			model.addRow(row);

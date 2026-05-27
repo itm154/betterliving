@@ -42,7 +42,7 @@ public class QuestionRepository {
 			pstmt.setString(1, q.getQuestionType());
 			pstmt.setString(2, q.getQuestionText());
 			pstmt.setString(3, q.getCorrectAnswer());
-			pstmt.setInt(4, q.getQuestionPoints());
+			pstmt.setInt(4, q.getPoints());
 
 			if (q instanceof MultipleChoiceQuestion mcq) {
 				pstmt.setString(5, String.join("||", mcq.getOptions()));
