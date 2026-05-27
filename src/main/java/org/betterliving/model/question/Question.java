@@ -1,11 +1,29 @@
 package org.betterliving.model.question;
 
-public interface Question {
-	int getId();
+public abstract class Question {
+	private final int id;
+	private final String text;
+	private final int points;
 
-	String getQuestionText();
+	protected Question(int id, String text, int points) {
+		this.id = id;
+		this.text = text;
+		this.points = points;
+	}
 
-	boolean validateAnswer(String userResponse);
+	public int getId() {
+		return id;
+	}
 
-	String getQuestionType();
+	public String getQuestionText() {
+		return text;
+	}
+
+	public int getQuestionPoints() {
+		return points;
+	}
+
+	public abstract String getQuestionType();
+
+	public abstract boolean validateAnswer(String userResponse);
 }

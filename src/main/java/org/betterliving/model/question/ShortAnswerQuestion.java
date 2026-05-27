@@ -1,24 +1,11 @@
 package org.betterliving.model.question;
 
-public class ShortAnswerQuestion implements Question {
-	private final int id;
-	private final String text;
+public class ShortAnswerQuestion extends Question {
 	private final String correctAnswer;
 
-	public ShortAnswerQuestion(int id, String text, String correctAnswer) {
-		this.id = id;
-		this.text = text;
+	public ShortAnswerQuestion(int id, String text, String correctAnswer, int points) {
+		super(id, text, points);
 		this.correctAnswer = correctAnswer;
-	}
-
-	@Override
-	public int getId() {
-		return id;
-	}
-
-	@Override
-	public String getQuestionText() {
-		return text;
 	}
 
 	@Override
