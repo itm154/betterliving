@@ -1,18 +1,21 @@
 package org.betterliving.model.question;
 
 public abstract class Question {
-	private final int id;
+	private int id;
 	private final String text;
 	private final int points;
 
-	protected Question(int id, String text, int points) {
-		this.id = id;
+	protected Question(String text, int points) {
 		this.text = text;
 		this.points = points;
 	}
 
 	public int getId() {
 		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getQuestionText() {
@@ -24,6 +27,8 @@ public abstract class Question {
 	}
 
 	public abstract String getQuestionType();
+
+	public abstract String getCorrectAnswer();
 
 	public abstract boolean validateAnswer(String userResponse);
 }

@@ -3,9 +3,19 @@ package org.betterliving.model.question;
 public class MultipleChoiceQuestion extends Question {
 	private final String correctAnswer;
 
-	public MultipleChoiceQuestion(int id, String text, String correctAnswer, int points) {
-		super(id, text, points);
+	public MultipleChoiceQuestion(String text, String correctAnswer, int points) {
+		super(text, points);
 		this.correctAnswer = correctAnswer;
+	}
+
+	// For repository use
+	public MultipleChoiceQuestion(int id, String text, String correctAnswer, int points) {
+		this(text, correctAnswer, points);
+		setId(id);
+	}
+
+	public String getCorrectAnswer() {
+		return correctAnswer;
 	}
 
 	@Override

@@ -3,9 +3,19 @@ package org.betterliving.model.question;
 public class ShortAnswerQuestion extends Question {
 	private final String correctAnswer;
 
-	public ShortAnswerQuestion(int id, String text, String correctAnswer, int points) {
-		super(id, text, points);
+	public ShortAnswerQuestion(String text, String correctAnswer, int points) {
+		super(text, points);
 		this.correctAnswer = correctAnswer;
+	}
+
+	// For repository use
+	public ShortAnswerQuestion(int id, String text, String correctAnswer, int points) {
+		this(text, correctAnswer, points);
+		setId(id);
+	}
+
+	public String getCorrectAnswer() {
+		return correctAnswer;
 	}
 
 	@Override
