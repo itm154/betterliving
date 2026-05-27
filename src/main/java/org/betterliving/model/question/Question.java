@@ -1,5 +1,7 @@
 package org.betterliving.model.question;
 
+import java.util.List;
+
 public abstract class Question {
 	private int id;
 	private final String text;
@@ -29,6 +31,10 @@ public abstract class Question {
 	public abstract String getQuestionType();
 
 	public abstract String getCorrectAnswer();
+
+	public List<String> getOptions() {
+		return java.util.Collections.emptyList();
+	}
 
 	public abstract boolean validateAnswer(String userResponse);
 }
