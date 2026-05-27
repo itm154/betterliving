@@ -15,8 +15,8 @@ public class QuestionController {
 		this.repository = repository;
 	}
 
-	public void addMultipleChoice(String text, String answer, int points) {
-		repository.save(new MultipleChoiceQuestion(text, answer, points));
+	public void addMultipleChoice(String text, String answer, int points, List<String> options) {
+		repository.save(new MultipleChoiceQuestion(text, answer, points, options));
 	}
 
 	public void addTrueFalse(String text, boolean answer, int points) {
