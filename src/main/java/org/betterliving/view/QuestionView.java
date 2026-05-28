@@ -126,7 +126,7 @@ public class QuestionView extends JFrame {
 			feedbackLabel.setText("Correct! (+ " + q.getPoints() + " points)");
 			feedbackLabel.setForeground(new Color(0, 120, 0));
 		} else {
-			feedbackLabel.setText("Incorrect. The correct answer was: " + q.getCorrectAnswer());
+			feedbackLabel.setText("Incorrect!");
 			feedbackLabel.setForeground(Color.RED);
 		}
 
