@@ -1,6 +1,6 @@
 package org.betterliving.model;
 
-public class LearningModule extends Identifiable {
+public class LearningModule implements Identifiable { 
     private int id;
     private String title;
     private String contentText;
@@ -13,12 +13,12 @@ public class LearningModule extends Identifiable {
         this.imagePath = imagePath;
     }
 
-    @override
+    @Override
     public int getId() {
         return id;
     }
 
-    @override
+    @Override
     public void setId(int id) {
         this.id = id;
     }
@@ -29,7 +29,6 @@ public class LearningModule extends Identifiable {
 
     public void setTitle(String title){
         this.title = title;
-
     }
 
     public String getContentText() {
