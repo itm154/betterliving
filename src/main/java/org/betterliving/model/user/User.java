@@ -1,6 +1,8 @@
 package org.betterliving.model.user;
 
-public abstract class User {
+import org.betterliving.model.Identifiable;
+
+public abstract class User implements Identifiable {
 
 	protected String name;
 	protected int id;
@@ -14,17 +16,13 @@ public abstract class User {
 		return name;
 	}
 
-	public int getID() {
+	@Override
+	public int getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	@Override
-	public String toString() {
-		return "Name : " + name + ", ID : " + id;
-	}
-
 }

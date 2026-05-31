@@ -1,6 +1,6 @@
 package org.betterliving.model.user;
 
-public class Student extends User {
+public class Student extends User implements Comparable<Student> {
 
 	private int score;
 
@@ -22,9 +22,7 @@ public class Student extends User {
 	}
 
 	@Override
-	public String toString() {
-		return "Student: " + name +
-				", ID: " + id +
-				", Score: " + score;
+	public int compareTo(Student other) {
+		return Integer.compare(other.getScore(), this.getScore());
 	}
 }
