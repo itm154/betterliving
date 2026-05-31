@@ -12,19 +12,19 @@ public class LearningModuleController {
 	}
 
 	public List<LearningModule> getAllModules() {
-		return repository.getAllModules();
+		return repository.findAll();
 	}
 
 	public void createNewModule() {
 		LearningModule newModule = new LearningModule(0, "New Module Title", "Enter content here...", "");
-		repository.addModule(newModule);
+		repository.save(newModule);
 	}
 
 	public void updateModule(LearningModule module) {
-		repository.updateModule(module);
+		repository.save(module);
 	}
 
 	public void deleteModule(int id) {
-		repository.deleteModule(id);
+		repository.deleteById(id);
 	}
 }
