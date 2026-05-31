@@ -1,6 +1,7 @@
 package org.betterliving.model;
 
 public interface Identifiable {
-    int getId();
-    void setId(int id);
+	int getId();
+
+	void setId(int id);
 }

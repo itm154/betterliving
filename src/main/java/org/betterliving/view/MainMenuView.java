@@ -1,37 +1,53 @@
 package org.betterliving.view;
 
 import org.betterliving.controller.QuestionController;
+import org.betterliving.controller.LearningModuleController;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class MainMenuView extends JFrame {
 	private final QuestionController controller;
+	private final LearningModuleController moduleController;
+	private final boolean isTeacher;
 
-	public MainMenuView(QuestionController controller) {
-		this.controller = controller;
+	public MainMenuView(QuestionController qscontroller, LearningModuleController lmcontroller, boolean isTeacher) {
+		this.isTeacher = isTeacher;
+		this.controller = qscontroller;
+		this.moduleController = lmcontroller;
 
-		setTitle("BetterLiving - Main Menu");
+		setTitle("BetterLiving - SDG 13: Climate Action Dashboard");
 		setSize(1920, 1080);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
-		setLayout(new GridLayout(3, 1, 10, 10));
+		setLayout(new GridLayout(0, 1, 10, 10));
+
+		JButton viewModuleBtn = new JButton("Open SDG 13: Climate Action Learning Module");
+		viewModuleBtn.setFont(new Font("Arial", Font.BOLD, 18));
+
+		viewModuleBtn.addActionListener(e -> new LearningModuleListView(moduleController, isTeacher));
+		add(viewModuleBtn);
 
 		JButton startQuizBtn = new JButton("Start Quiz");
 		startQuizBtn.setFont(new Font("Arial", Font.BOLD, 18));
-		startQuizBtn.addActionListener(e -> new QuestionView(controller));
-
-		// FUTURE NOTE: If user is not teacher dont show this button
-		JButton listQuestionsBtn = new JButton("Question List");
-		listQuestionsBtn.setFont(new Font("Arial", Font.BOLD, 18));
-		listQuestionsBtn.addActionListener(e -> new QuestionListView(controller));
-
-		JButton anotherButton = new JButton("Some other button");
-		anotherButton.setFont(new Font("Arial", Font.BOLD, 18));
-
+		startQuizBtn.addActionListener(e -> new QuestionView(qscontroller));
 		add(startQuizBtn);
-		add(listQuestionsBtn);
-		add(anotherButton);
+
+		JButton listQuestionsBtn = new JButton("Question List Manager");
+		listQuestionsBtn.setFont(new Font("Arial", Font.BOLD, 18));
+		listQuestionsBtn.addActionListener(e -> new QuestionListView(qscontroller));
+
+		if (isTeacher) { // only teachers can access question management page
+			add(listQuestionsBtn);
+		}
+
+		JButton switchRoleBtn = new JButton(isTeacher ? "Switch to Student Mode" : "Switch to Teacher Mode");
+		switchRoleBtn.setFont(new Font("Arial", Font.BOLD, 18));
+		switchRoleBtn.addActionListener(e -> {
+			dispose();
+			new MainMenuView(controller, moduleController, !isTeacher);
+		});
+		add(switchRoleBtn);
 
 		setVisible(true);
 	}
