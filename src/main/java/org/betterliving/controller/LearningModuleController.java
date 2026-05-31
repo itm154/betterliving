@@ -7,7 +7,7 @@ import java.util.List;
 public class LearningModuleController {
 	private final LearningModuleRepository repository;
 
-	public LearningModuleController() {
+	public LearningModuleController(LearningModuleRepository repository) {
 		this.repository = new LearningModuleRepository();
 	}
 
