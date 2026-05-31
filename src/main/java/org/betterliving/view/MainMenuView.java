@@ -20,7 +20,7 @@ public class MainMenuView extends JFrame {
 		setSize(1920, 1080);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
-		setLayout(new GridLayout(4, 1, 10, 10));
+		setLayout(new GridLayout(0, 1, 10, 10));
 
 		JButton viewModuleBtn = new JButton("Open SDG 13: Climate Action Learning Module");
 		viewModuleBtn.setFont(new Font("Arial", Font.BOLD, 18));
@@ -40,6 +40,14 @@ public class MainMenuView extends JFrame {
 		if (isTeacher) { // only teachers can access question management page
 			add(listQuestionsBtn);
 		}
+
+		JButton switchRoleBtn = new JButton(isTeacher ? "Switch to Student Mode" : "Switch to Teacher Mode");
+		switchRoleBtn.setFont(new Font("Arial", Font.BOLD, 18));
+		switchRoleBtn.addActionListener(e -> {
+			dispose();
+			new MainMenuView(controller, moduleController, !isTeacher);
+		});
+		add(switchRoleBtn);
 
 		setVisible(true);
 	}
