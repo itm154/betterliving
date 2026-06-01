@@ -21,8 +21,12 @@ public class QuestionView extends JFrame {
 	private JButton nextBtn;
 
 	public QuestionView(QuestionController controller) {
+		this(controller, 1);
+	}
+
+	public QuestionView(QuestionController controller, int quizSetId) {
 		this.controller = controller;
-		this.questions = controller.getAllQuestions();
+		this.questions = controller.getQuestionsForQuizSet(quizSetId);
 
 		for (Question q : questions) {
 			maxPossibleScore += q.getPoints();
