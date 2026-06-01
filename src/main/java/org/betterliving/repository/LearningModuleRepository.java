@@ -5,7 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LearningModuleRepository {
+public class LearningModuleRepository implements Storeable<LearningModule> {
 	private static final String DB_URL = "jdbc:derby:betterlivingDB;create=true";
 
 	public LearningModuleRepository() {
