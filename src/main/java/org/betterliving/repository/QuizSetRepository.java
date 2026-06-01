@@ -5,7 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuizSetRepository {
+public class QuizSetRepository implements Storeable<QuizSet> {
 	private static final String DB_URL = "jdbc:derby:betterlivingDB;create=true";
 
 	public QuizSetRepository() {

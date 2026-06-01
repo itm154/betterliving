@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class QuestionRepository {
+public class QuestionRepository implements Storeable<Question> {
 	private static final String DB_URL = "jdbc:derby:betterlivingDB;create=true";
 
 	public QuestionRepository() {
