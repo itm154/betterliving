@@ -61,12 +61,18 @@ public class LearningModuleView extends JFrame {
 			uploadBtn.addActionListener(e -> {
 				JFileChooser chooser = new JFileChooser();
 				if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-					module.setImagePath(chooser.getSelectedFile().getAbsolutePath());
-					renderImage();
+					try {
+						byte[] bytes = java.nio.file.Files.readAllBytes(chooser.getSelectedFile().toPath());
+						module.setImageBytes(bytes);
+						renderImage();
+					} catch (Exception ex) {
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(this, "Failed to read image file.");
+					}
 				}
 			});
 			removeBtn.addActionListener(e -> {
-				module.setImagePath("");
+				module.setImageBytes(null);
 				renderImage();
 			});
 
@@ -102,10 +108,10 @@ public class LearningModuleView extends JFrame {
 	}
 
 	private void renderImage() {
-		String path = module.getImagePath();
-		if (path != null && !path.trim().isEmpty() && new File(path).exists()) {
+		byte[] bytes = module.getImageBytes();
+		if (bytes != null && bytes.length > 0) {
 			try {
-				Image img = new ImageIcon(path).getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH);
+				Image img = new ImageIcon(bytes).getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH);
 				imageLabel.setIcon(new ImageIcon(img));
 				imageLabel.setText("");
 			} catch (Exception err) {

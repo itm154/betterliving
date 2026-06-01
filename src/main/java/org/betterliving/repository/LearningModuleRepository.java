@@ -16,7 +16,7 @@ public class LearningModuleRepository {
 							"ID INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY, " +
 							"TITLE VARCHAR(255), " +
 							"CONTENT VARCHAR(4000), " +
-							"IMAGE_PATH VARCHAR(255))");
+							"IMAGE_DATA BLOB)");
 				}
 			}
 		} catch (SQLException e) {
@@ -42,7 +42,7 @@ public class LearningModuleRepository {
 						rs.getInt("ID"),
 						rs.getString("TITLE"),
 						rs.getString("CONTENT"),
-						rs.getString("IMAGE_PATH")));
+						rs.getBytes("IMAGE_DATA")));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -52,12 +52,16 @@ public class LearningModuleRepository {
 
 	public void save(LearningModule module) {
 		if (module.getId() == 0) {
-			String sql = "INSERT INTO LEARNING_MODULES (TITLE, CONTENT, IMAGE_PATH) VALUES (?, ?, ?)";
+			String sql = "INSERT INTO LEARNING_MODULES (TITLE, CONTENT, IMAGE_DATA) VALUES (?, ?, ?)";
 			try (Connection conn = DriverManager.getConnection(DB_URL);
 					PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 				pstmt.setString(1, module.getTitle());
 				pstmt.setString(2, module.getContentText());
-				pstmt.setString(3, module.getImagePath());
+				if (module.getImageBytes() != null) {
+					pstmt.setBytes(3, module.getImageBytes());
+				} else {
+					pstmt.setNull(3, Types.BLOB);
+				}
 				pstmt.executeUpdate();
 				try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
 					if (generatedKeys.next()) {
@@ -68,12 +72,16 @@ public class LearningModuleRepository {
 				e.printStackTrace();
 			}
 		} else {
-			String sql = "UPDATE LEARNING_MODULES SET TITLE = ?, CONTENT = ?, IMAGE_PATH = ? WHERE ID = ?";
+			String sql = "UPDATE LEARNING_MODULES SET TITLE = ?, CONTENT = ?, IMAGE_DATA = ? WHERE ID = ?";
 			try (Connection conn = DriverManager.getConnection(DB_URL);
 					PreparedStatement pstmt = conn.prepareStatement(sql)) {
 				pstmt.setString(1, module.getTitle());
 				pstmt.setString(2, module.getContentText());
-				pstmt.setString(3, module.getImagePath());
+				if (module.getImageBytes() != null) {
+					pstmt.setBytes(3, module.getImageBytes());
+				} else {
+					pstmt.setNull(3, Types.BLOB);
+				}
 				pstmt.setInt(4, module.getId());
 				pstmt.executeUpdate();
 			} catch (SQLException e) {

@@ -4,13 +4,13 @@ public class LearningModule implements Identifiable {
 	private int id;
 	private String title;
 	private String contentText;
-	private String imagePath;
+	private byte[] imageBytes;
 
-	public LearningModule(int id, String title, String contentText, String imagePath) {
+	public LearningModule(int id, String title, String contentText, byte[] imageBytes) {
 		this.id = id;
 		this.title = title;
 		this.contentText = contentText;
-		this.imagePath = imagePath;
+		this.imageBytes = imageBytes;
 	}
 
 	@Override
@@ -39,11 +39,11 @@ public class LearningModule implements Identifiable {
 		this.contentText = contentText;
 	}
 
-	public String getImagePath() {
-		return imagePath;
+	public byte[] getImageBytes() {
+		return imageBytes;
 	}
 
-	public void setImagePath(String imagePath) {
-		this.imagePath = imagePath;
+	public void setImageBytes(byte[] imageBytes) {
+		this.imageBytes = imageBytes;
 	}
 }

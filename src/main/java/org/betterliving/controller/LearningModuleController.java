@@ -16,7 +16,7 @@ public class LearningModuleController {
 	}
 
 	public void createNewModule() {
-		LearningModule newModule = new LearningModule(0, "New Module Title", "Enter content here...", "");
+		LearningModule newModule = new LearningModule(0, "New Module Title", "Enter content here...", null);
 		repository.save(newModule);
 	}
 
