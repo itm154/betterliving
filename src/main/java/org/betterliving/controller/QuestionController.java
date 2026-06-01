@@ -15,31 +15,29 @@ public class QuestionController {
 		this.repository = repository;
 	}
 
-	public void addMultipleChoice(String text, String answer, int points, List<String> options) {
-		repository.save(new MultipleChoiceQuestion(text, answer, points, options));
+	public void addMultipleChoice(String text, String answer, int points, List<String> options, int quizSetId) {
+		MultipleChoiceQuestion mcq = new MultipleChoiceQuestion(text, answer, points, options);
+		mcq.setQuizSetId(quizSetId);
+		repository.save(mcq);
 	}
 
-	public void addTrueFalse(String text, boolean answer, int points) {
-		repository.save(new TrueFalseQuestion(text, answer, points));
+	public void addTrueFalse(String text, boolean answer, int points, int quizSetId) {
+		TrueFalseQuestion tfq = new TrueFalseQuestion(text, answer, points);
+		tfq.setQuizSetId(quizSetId);
+		repository.save(tfq);
 	}
 
-	public void addShortAnswer(String text, String answer, int points) {
-		repository.save(new ShortAnswerQuestion(text, answer, points));
+	public void addShortAnswer(String text, String answer, int points, int quizSetId) {
+		ShortAnswerQuestion saq = new ShortAnswerQuestion(text, answer, points);
+		saq.setQuizSetId(quizSetId);
+		repository.save(saq);
 	}
 
-	public List<Question> getAllQuestions() {
-		return repository.findAll();
+	public List<Question> getQuestionsForQuizSet(int quizSetId) {
+		return repository.findByQuizSetId(quizSetId);
 	}
 
 	public void deleteQuestion(int id) {
 		repository.deleteById(id);
-	}
-
-	public boolean checkAnswer(int questionId, String userResponse) {
-		return repository.findAll().stream()
-				.filter(q -> q.getId() == questionId)
-				.findFirst()
-				.map(q -> q.validateAnswer(userResponse))
-				.orElse(false);
 	}
 }

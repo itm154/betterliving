@@ -20,7 +20,9 @@ public class QuestionRepository {
 							"text VARCHAR(1000), " +
 							"correct_answer VARCHAR(500), " +
 							"points INT, " +
-							"mcq_options VARCHAR(1000))");
+							"mcq_options VARCHAR(1000), " +
+							"quiz_set_id INT, " +
+							"FOREIGN KEY (quiz_set_id) REFERENCES QUIZ_SETS(id) ON DELETE CASCADE)");
 				}
 			}
 		} catch (SQLException e) {
@@ -36,7 +38,7 @@ public class QuestionRepository {
 	}
 
 	public void save(Question q) {
-		String sql = "INSERT INTO QUESTIONS (type, text, correct_answer, points, mcq_options) VALUES (?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO QUESTIONS (type, text, correct_answer, points, mcq_options, quiz_set_id) VALUES (?, ?, ?, ?, ?, ?)";
 		try (Connection conn = DriverManager.getConnection(DB_URL);
 				PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 			pstmt.setString(1, q.getQuestionType());
@@ -49,6 +51,7 @@ public class QuestionRepository {
 			} else {
 				pstmt.setNull(5, Types.VARCHAR);
 			}
+			pstmt.setInt(6, q.getQuizSetId() == 0 ? 1 : q.getQuizSetId());
 
 			pstmt.executeUpdate();
 
@@ -77,6 +80,23 @@ public class QuestionRepository {
 		return questions;
 	}
 
+	public List<Question> findByQuizSetId(int quizSetId) {
+		List<Question> questions = new ArrayList<>();
+		String sql = "SELECT * FROM QUESTIONS WHERE quiz_set_id = ?";
+		try (Connection conn = DriverManager.getConnection(DB_URL);
+				PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, quizSetId);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				while (rs.next()) {
+					questions.add(mapResultSetToQuestion(rs));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return questions;
+	}
+
 	public void deleteById(int id) {
 		String sql = "DELETE FROM QUESTIONS WHERE id = ?";
 		try (Connection conn = DriverManager.getConnection(DB_URL);
@@ -95,8 +115,9 @@ public class QuestionRepository {
 		String ans = rs.getString("correct_answer");
 		int points = rs.getInt("points");
 		String optionsRaw = rs.getString("mcq_options");
+		int quizSetId = rs.getInt("quiz_set_id");
 
-		return switch (type) {
+		Question q = switch (type) {
 			case "MC" -> {
 				List<String> options = (optionsRaw != null) ? Arrays.asList(optionsRaw.split("\\|\\|")) : new ArrayList<>();
 				yield new MultipleChoiceQuestion(id, text, ans, points, options);
@@ -105,5 +126,7 @@ public class QuestionRepository {
 			case "TF" -> new TrueFalseQuestion(id, text, Boolean.parseBoolean(ans), points);
 			default -> throw new IllegalArgumentException("Unknown question type: " + type);
 		};
+		q.setQuizSetId(quizSetId);
+		return q;
 	}
 }

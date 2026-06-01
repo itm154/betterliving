@@ -9,6 +9,7 @@ public abstract class Question implements Identifiable, Scorable {
 	private int id;
 	private final String text;
 	private final int points;
+	private int quizSetId = 1;
 
 	protected Question(String text, int points) {
 		this.text = text;
@@ -23,6 +24,14 @@ public abstract class Question implements Identifiable, Scorable {
 	@Override
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public int getQuizSetId() {
+		return quizSetId;
+	}
+
+	public void setQuizSetId(int quizSetId) {
+		this.quizSetId = quizSetId;
 	}
 
 	public String getQuestionText() {
@@ -44,3 +53,4 @@ public abstract class Question implements Identifiable, Scorable {
 
 	public abstract boolean validateAnswer(String userResponse);
 }
+
