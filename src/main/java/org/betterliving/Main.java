@@ -25,7 +25,7 @@ public class Main {
 		ScoreboardController sbController = new ScoreboardController(sbRepository);
 
 		// Add preset datas
-		DatabaseSeeder.seed(qsController);
+		DatabaseSeeder.seed(qsController, lmController);
 
 		// Launch GUI
 		SwingUtilities.invokeLater(() -> new MainMenuView(qsController, lmController, qSetController, sbController, false));

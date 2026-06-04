@@ -25,6 +25,11 @@ public class LearningModuleController {
 		repository.save(module);
 	}
 
+	public void addModule(String title, String content, byte[] imageBytes) {
+		LearningModule module = new LearningModule(0, title, content, imageBytes);
+		repository.save(module);
+	}
+
 	public void deleteModule(int id) {
 		repository.deleteById(id);
 	}

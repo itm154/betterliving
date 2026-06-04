@@ -11,10 +11,6 @@ public enum QuestionType {
 		this.code = code;
 	}
 
-	public String getCode() {
-		return code;
-	}
-
 	public static QuestionType fromCode(String code) {
 		for (QuestionType type : values()) {
 			if (type.code.equalsIgnoreCase(code)) {
@@ -22,5 +18,9 @@ public enum QuestionType {
 			}
 		}
 		throw new IllegalArgumentException("Unknown question type code: " + code);
+	}
+
+	public String getCode() {
+		return code;
 	}
 }

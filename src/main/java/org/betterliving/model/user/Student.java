@@ -6,8 +6,8 @@ import java.util.List;
 
 public class Student extends User implements Comparable<Student> {
 
-	private int score;
 	private final List<Rewardable> badges;
+	private int score;
 
 	public Student(String name, int id) {
 		super(name, id);

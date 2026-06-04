@@ -21,15 +21,14 @@ public class QuestionView extends JFrame {
 	private final ScoreboardController sbController;
 	private final String name;
 	private final List<Question> questions;
-	private int currentQuestionIndex = 0;
-	private int totalScore = 0;
-	private int maxPossibleScore = 0;
-	private int totalCorrect = 0;
-
 	private final JTextArea questionArea;
 	private final JPanel inputPanel;
 	private final JLabel feedbackLabel;
 	private final JButton nextBtn;
+	private int currentQuestionIndex = 0;
+	private int totalScore = 0;
+	private int maxPossibleScore = 0;
+	private int totalCorrect = 0;
 
 	public QuestionView(QuestionController qsController, int quizSetId, ScoreboardController sbController, String name) {
 		this.qsController = qsController;
@@ -157,8 +156,7 @@ public class QuestionView extends JFrame {
 
 		List<Rewardable> rewards = Arrays.asList(
 				new YouTriedBadge(maxPossibleScore, totalScore),
-				new PerfectScoreBadge(maxPossibleScore)
-		);
+				new PerfectScoreBadge(maxPossibleScore));
 
 		List<Rewardable> achievedBadges = new ArrayList<>();
 		List<String> achievedNames = new ArrayList<>();

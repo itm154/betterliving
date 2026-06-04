@@ -1,13 +1,18 @@
 package org.betterliving.repository;
 
+import org.betterliving.controller.LearningModuleController;
 import org.betterliving.controller.QuestionController;
 
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 public class DatabaseSeeder {
 
-	public static void seed(QuestionController qsController) {
-		// Preset Questions, AI generated because im NOT coming with 20 questions myself
+	public static void seed(QuestionController qsController, LearningModuleController lmController) {
+		// Preset Questions, mostly AI generated because i CANNOT come up with 20 questions myself
 		if (qsController.getQuestionsForQuizSet(1).isEmpty()) {
 			// --- TRUE / FALSE QUESTIONS (5 Points) ---
 			qsController.addTrueFalse("Is carbon dioxide the only greenhouse gas driving climate change?", false, 5, 1);
@@ -66,5 +71,35 @@ public class DatabaseSeeder {
 					15,
 					Arrays.asList("Climate Mitigation", "Climate Adaptation", "Carbon Offsetting", "Geoengineering"), 1);
 		}
+
+		// Preset Learning Modules
+		if (lmController.getAllModules().isEmpty()) {
+			// Copy this block of code to add more modules
+			// Add your images to /src/main/resources directory, reference it using its file name
+			lmController.addModule(
+					"Introduction to SDG 13: Climate Action",
+					"Sustainable Development Goal 13 (SDG 13) calls for urgent action to combat climate change and its impacts. Climate change is a global challenge that disrupts national economies and affects lives, costing people, communities, and countries dearly today and even more tomorrow.",
+					loadImage("intro.png")
+			);
+		}
+	}
+
+	private static byte[] loadImage(String filename) {
+		try {
+			Path imagePath = Paths.get("src/main/resources/images/" + filename);
+			if (Files.exists(imagePath)) {
+				return Files.readAllBytes(imagePath);
+			} else {
+				try (InputStream is = DatabaseSeeder.class.getResourceAsStream("/images/" + filename)) {
+					if (is != null) {
+						return is.readAllBytes();
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
+
