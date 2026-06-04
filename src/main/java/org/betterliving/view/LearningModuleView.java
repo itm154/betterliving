@@ -9,7 +9,7 @@ import java.awt.*;
 public class LearningModuleView extends JFrame {
 	private final LearningModule module;
 	private final LearningModuleListView parentView;
-	private final LearningModuleController controller;
+	private final LearningModuleController lmController;
 	private final boolean isTeacher;
 
 	private final JTextField titleField;
@@ -17,10 +17,10 @@ public class LearningModuleView extends JFrame {
 	private final JLabel imageLabel;
 
 	public LearningModuleView(LearningModule module, boolean isTeacher, LearningModuleListView parentView,
-	                          LearningModuleController controller) {
+	                          LearningModuleController lmController) {
 		this.module = module;
 		this.parentView = parentView;
-		this.controller = controller;
+		this.lmController = lmController;
 		this.isTeacher = isTeacher;
 
 		setTitle("Viewing: " + module.getTitle());
@@ -92,7 +92,7 @@ public class LearningModuleView extends JFrame {
 				module.setTitle(titleField.getText());
 				module.setContentText(contentArea.getText());
 
-				controller.updateModule(module);
+				lmController.updateModule(module);
 
 				setTitle("Viewing: " + module.getTitle());
 				parentView.refreshTable();

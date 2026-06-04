@@ -9,7 +9,7 @@ public class LearningModuleController {
 	private final LearningModuleRepository repository;
 
 	public LearningModuleController(LearningModuleRepository repository) {
-		this.repository = new LearningModuleRepository();
+		this.repository = repository;
 	}
 
 	public List<LearningModule> getAllModules() {

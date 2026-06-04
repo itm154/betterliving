@@ -10,14 +10,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class QuestionRepository implements Storeable<Question> {
+public class QuestionRepository implements Storable<Question> {
 	private static final String DB_URL = "jdbc:derby:betterlivingDB;create=true";
 
 	public QuestionRepository() {
 		try (Connection conn = DriverManager.getConnection(DB_URL)) {
 			if (!tableExists(conn, "QUESTIONS")) {
 				try (Statement stmt = conn.createStatement()) {
-					stmt.execute("CREATE TABLE QUESTIONS (" +
+					stmt.execute("CREATE TABLE questions (" +
 							"id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY, " +
 							"type VARCHAR(10), " +
 							"text VARCHAR(1000), " +
@@ -25,7 +25,7 @@ public class QuestionRepository implements Storeable<Question> {
 							"points INT, " +
 							"mcq_options VARCHAR(1000), " +
 							"quiz_set_id INT, " +
-							"FOREIGN KEY (quiz_set_id) REFERENCES QUIZ_SETS(id) ON DELETE CASCADE)");
+							"FOREIGN KEY (quiz_set_id) REFERENCES quiz_sets(id) ON DELETE CASCADE)");
 				}
 			}
 		} catch (SQLException e) {
@@ -41,7 +41,7 @@ public class QuestionRepository implements Storeable<Question> {
 	}
 
 	public void save(Question q) {
-		String sql = "INSERT INTO QUESTIONS (type, text, correct_answer, points, mcq_options, quiz_set_id) VALUES (?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO questions (type, text, correct_answer, points, mcq_options, quiz_set_id) VALUES (?, ?, ?, ?, ?, ?)";
 		try (Connection conn = DriverManager.getConnection(DB_URL);
 		     PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 			pstmt.setString(1, q.getQuestionType());
@@ -70,7 +70,7 @@ public class QuestionRepository implements Storeable<Question> {
 
 	public List<Question> findAll() {
 		List<Question> questions = new ArrayList<>();
-		String sql = "SELECT * FROM QUESTIONS";
+		String sql = "SELECT * FROM questions";
 		try (Connection conn = DriverManager.getConnection(DB_URL);
 		     Statement stmt = conn.createStatement();
 		     ResultSet rs = stmt.executeQuery(sql)) {
@@ -85,7 +85,7 @@ public class QuestionRepository implements Storeable<Question> {
 
 	public List<Question> findByQuizSetId(int quizSetId) {
 		List<Question> questions = new ArrayList<>();
-		String sql = "SELECT * FROM QUESTIONS WHERE quiz_set_id = ?";
+		String sql = "SELECT * FROM questions WHERE quiz_set_id = ?";
 		try (Connection conn = DriverManager.getConnection(DB_URL);
 		     PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, quizSetId);
@@ -101,7 +101,7 @@ public class QuestionRepository implements Storeable<Question> {
 	}
 
 	public void deleteById(int id) {
-		String sql = "DELETE FROM QUESTIONS WHERE id = ?";
+		String sql = "DELETE FROM questions WHERE id = ?";
 		try (Connection conn = DriverManager.getConnection(DB_URL);
 		     PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, id);

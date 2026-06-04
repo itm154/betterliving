@@ -6,14 +6,14 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScoreboardRepository implements Storeable<Student> {
+public class ScoreboardRepository implements Storable<Student> {
 	private static final String DB_URL = "jdbc:derby:betterlivingDB;create=true";
 
 	public ScoreboardRepository() {
 		try (Connection conn = DriverManager.getConnection(DB_URL)) {
 			if (!tableExists(conn, "SCOREBOARD")) {
 				try (Statement stmt = conn.createStatement()) {
-					stmt.execute("CREATE TABLE SCOREBOARD (" +
+					stmt.execute("CREATE TABLE scoreboard (" +
 							"id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY, " +
 							"name VARCHAR(255), " +
 							"score INT)");
@@ -34,7 +34,7 @@ public class ScoreboardRepository implements Storeable<Student> {
 	@Override
 	public List<Student> findAll() {
 		List<Student> students = new ArrayList<>();
-		String sql = "SELECT * FROM SCOREBOARD ORDER BY score DESC";
+		String sql = "SELECT * FROM scoreboard ORDER BY score DESC";
 		try (Connection conn = DriverManager.getConnection(DB_URL);
 		     Statement stmt = conn.createStatement();
 		     ResultSet rs = stmt.executeQuery(sql)) {
@@ -50,7 +50,7 @@ public class ScoreboardRepository implements Storeable<Student> {
 	}
 
 	public Student findByName(String name) {
-		String sql = "SELECT * FROM SCOREBOARD WHERE name = ?";
+		String sql = "SELECT * FROM scoreboard WHERE name = ?";
 		try (Connection conn = DriverManager.getConnection(DB_URL);
 		     PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, name);
@@ -70,7 +70,7 @@ public class ScoreboardRepository implements Storeable<Student> {
 	@Override
 	public void save(Student student) {
 		if (student.getId() == 0) {
-			String sql = "INSERT INTO SCOREBOARD (name, score) VALUES (?, ?)";
+			String sql = "INSERT INTO scoreboard (name, score) VALUES (?, ?)";
 			try (Connection conn = DriverManager.getConnection(DB_URL);
 			     PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 				pstmt.setString(1, student.getName());
@@ -85,7 +85,7 @@ public class ScoreboardRepository implements Storeable<Student> {
 				e.printStackTrace();
 			}
 		} else {
-			String sql = "UPDATE SCOREBOARD SET name = ?, score = ? WHERE id = ?";
+			String sql = "UPDATE scoreboard SET name = ?, score = ? WHERE id = ?";
 			try (Connection conn = DriverManager.getConnection(DB_URL);
 			     PreparedStatement pstmt = conn.prepareStatement(sql)) {
 				pstmt.setString(1, student.getName());
@@ -100,7 +100,7 @@ public class ScoreboardRepository implements Storeable<Student> {
 
 	@Override
 	public void deleteById(int id) {
-		String sql = "DELETE FROM SCOREBOARD WHERE id = ?";
+		String sql = "DELETE FROM scoreboard WHERE id = ?";
 		try (Connection conn = DriverManager.getConnection(DB_URL);
 		     PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, id);

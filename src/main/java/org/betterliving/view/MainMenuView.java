@@ -9,33 +9,19 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MainMenuView extends JFrame {
-	private final QuestionController controller;
-	private final LearningModuleController moduleController;
-	private final QuizSetController quizSetController;
-	private final ScoreboardController scoreboardController;
+	private final QuestionController qsController;
+	private final LearningModuleController lmController;
+	private final QuizSetController qSetController;
+	private final ScoreboardController sbController;
 	private final boolean isTeacher;
 
-	public MainMenuView(QuestionController qscontroller, LearningModuleController lmcontroller, boolean isTeacher) {
-		this(qscontroller, lmcontroller,
-				new org.betterliving.controller.QuizSetController(new org.betterliving.repository.QuizSetRepository()),
-				new org.betterliving.controller.ScoreboardController(new org.betterliving.repository.ScoreboardRepository()),
-				isTeacher);
-	}
-
-	public MainMenuView(QuestionController qscontroller, LearningModuleController lmcontroller,
-	                    QuizSetController quizSetController, boolean isTeacher) {
-		this(qscontroller, lmcontroller, quizSetController,
-				new org.betterliving.controller.ScoreboardController(new org.betterliving.repository.ScoreboardRepository()),
-				isTeacher);
-	}
-
-	public MainMenuView(QuestionController qscontroller, LearningModuleController lmcontroller,
-	                    QuizSetController quizSetController, ScoreboardController scoreboardController, boolean isTeacher) {
+	public MainMenuView(QuestionController qsController, LearningModuleController lmController,
+	                    QuizSetController qSetController, ScoreboardController sbController, boolean isTeacher) {
 		this.isTeacher = isTeacher;
-		this.controller = qscontroller;
-		this.moduleController = lmcontroller;
-		this.quizSetController = quizSetController;
-		this.scoreboardController = scoreboardController;
+		this.qsController = qsController;
+		this.lmController = lmController;
+		this.qSetController = qSetController;
+		this.sbController = sbController;
 
 		setTitle("BetterLiving - SDG 13: Climate Action Dashboard");
 		setSize(1920, 1080);
@@ -45,25 +31,25 @@ public class MainMenuView extends JFrame {
 
 		JButton viewModuleBtn = new JButton("Open SDG 13: Climate Action Learning Module");
 		viewModuleBtn.setFont(new Font("Arial", Font.BOLD, 18));
-		viewModuleBtn.addActionListener(e -> new LearningModuleListView(moduleController, isTeacher));
+		viewModuleBtn.addActionListener(e -> new LearningModuleListView(this.lmController, isTeacher));
 		add(viewModuleBtn);
 
 		JButton viewQuizSetsBtn = new JButton("Open SDG 13: Climate Action Quiz Sets");
 		viewQuizSetsBtn.setFont(new Font("Arial", Font.BOLD, 18));
 		viewQuizSetsBtn
-				.addActionListener(e -> new QuizSetListView(quizSetController, controller, scoreboardController, isTeacher));
+				.addActionListener(e -> new QuizSetListView(qSetController, this.qsController, sbController, isTeacher));
 		add(viewQuizSetsBtn);
 
 		JButton scoreboardBtn = new JButton("View Scoreboard");
 		scoreboardBtn.setFont(new Font("Arial", Font.BOLD, 18));
-		scoreboardBtn.addActionListener(e -> new ScoreboardListView(scoreboardController, isTeacher));
+		scoreboardBtn.addActionListener(e -> new ScoreboardListView(sbController, isTeacher));
 		add(scoreboardBtn);
 
 		JButton switchRoleBtn = new JButton(isTeacher ? "Switch to Student Mode" : "Switch to Teacher Mode");
 		switchRoleBtn.setFont(new Font("Arial", Font.BOLD, 18));
 		switchRoleBtn.addActionListener(e -> {
 			dispose();
-			new MainMenuView(controller, moduleController, quizSetController, scoreboardController, !isTeacher);
+			new MainMenuView(this.qsController, this.lmController, qSetController, sbController, !isTeacher);
 		});
 		add(switchRoleBtn);
 

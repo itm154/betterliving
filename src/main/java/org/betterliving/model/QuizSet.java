@@ -2,11 +2,11 @@ package org.betterliving.model;
 
 public class QuizSet implements Identifiable {
 	private int id;
-	private String name;
+	private String title;
 
-	public QuizSet(int id, String name) {
+	public QuizSet(int id, String title) {
 		this.id = id;
-		this.name = name;
+		this.title = title;
 	}
 
 	@Override
@@ -19,11 +19,11 @@ public class QuizSet implements Identifiable {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 }

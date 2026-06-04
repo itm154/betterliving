@@ -9,7 +9,7 @@ import java.awt.*;
 import java.util.List;
 
 public class ScoreboardListView extends JFrame {
-	private final ScoreboardController controller;
+	private final ScoreboardController sbController;
 	private final boolean isTeacher;
 	private final DefaultTableModel tableModel;
 	private final JTable table;
@@ -19,12 +19,12 @@ public class ScoreboardListView extends JFrame {
 		this(new ScoreboardController(new org.betterliving.repository.ScoreboardRepository()), false);
 	}
 
-	public ScoreboardListView(ScoreboardController controller) {
-		this(controller, false);
+	public ScoreboardListView(ScoreboardController sbController) {
+		this(sbController, false);
 	}
 
-	public ScoreboardListView(ScoreboardController controller, boolean isTeacher) {
-		this.controller = controller;
+	public ScoreboardListView(ScoreboardController sbController, boolean isTeacher) {
+		this.sbController = sbController;
 		this.isTeacher = isTeacher;
 
 		setTitle("Scoreboard");
@@ -49,15 +49,15 @@ public class ScoreboardListView extends JFrame {
 
 		refreshTable();
 
-		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		JButton deleteBtn = new JButton("Delete Selected");
 
 		deleteBtn.addActionListener(e -> deleteSelectedScore());
 
 		if (isTeacher) {
-			buttonPanel.add(deleteBtn);
+			actionPanel.add(deleteBtn);
 		}
-		add(buttonPanel, BorderLayout.SOUTH);
+		add(actionPanel, BorderLayout.SOUTH);
 
 		setVisible(true);
 	}
@@ -74,14 +74,14 @@ public class ScoreboardListView extends JFrame {
 				"Are you sure you want to delete the score for " + selectedStudent.getName() + "?",
 				"Confirm Delete",
 				JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-			controller.deleteScore(selectedStudent.getId());
+			sbController.deleteScore(selectedStudent.getId());
 			refreshTable();
 		}
 	}
 
 	public void refreshTable() {
 		tableModel.setRowCount(0);
-		currentStudents = controller.getAllScores();
+		currentStudents = sbController.getAllScores();
 		for (Student s : currentStudents) {
 			tableModel.addRow(new Object[]{s.getId(), s.getName(), s.getScore()});
 		}

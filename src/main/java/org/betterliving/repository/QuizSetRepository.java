@@ -6,16 +6,16 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuizSetRepository implements Storeable<QuizSet> {
+public class QuizSetRepository implements Storable<QuizSet> {
 	private static final String DB_URL = "jdbc:derby:betterlivingDB;create=true";
 
 	public QuizSetRepository() {
 		try (Connection conn = DriverManager.getConnection(DB_URL)) {
 			if (!tableExists(conn, "QUIZ_SETS")) {
 				try (Statement stmt = conn.createStatement()) {
-					stmt.execute("CREATE TABLE QUIZ_SETS (" +
+					stmt.execute("CREATE TABLE quiz_sets (" +
 							"id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY, " +
-							"name VARCHAR(255))");
+							"title VARCHAR(255))");
 				}
 			}
 
@@ -37,12 +37,12 @@ public class QuizSetRepository implements Storeable<QuizSet> {
 
 	public List<QuizSet> findAll() {
 		List<QuizSet> sets = new ArrayList<>();
-		String sql = "SELECT * FROM QUIZ_SETS";
+		String sql = "SELECT * FROM quiz_sets";
 		try (Connection conn = DriverManager.getConnection(DB_URL);
 		     Statement stmt = conn.createStatement();
 		     ResultSet rs = stmt.executeQuery(sql)) {
 			while (rs.next()) {
-				sets.add(new QuizSet(rs.getInt("id"), rs.getString("name")));
+				sets.add(new QuizSet(rs.getInt("id"), rs.getString("title")));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -51,13 +51,13 @@ public class QuizSetRepository implements Storeable<QuizSet> {
 	}
 
 	public QuizSet findById(int id) {
-		String sql = "SELECT * FROM QUIZ_SETS WHERE id = ?";
+		String sql = "SELECT * FROM quiz_sets WHERE id = ?";
 		try (Connection conn = DriverManager.getConnection(DB_URL);
 		     PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, id);
 			try (ResultSet rs = pstmt.executeQuery()) {
 				if (rs.next()) {
-					return new QuizSet(rs.getInt("id"), rs.getString("name"));
+					return new QuizSet(rs.getInt("id"), rs.getString("title"));
 				}
 			}
 		} catch (SQLException e) {
@@ -72,10 +72,10 @@ public class QuizSetRepository implements Storeable<QuizSet> {
 		// The database assigns the ID automatically
 		// If ID is the same, update
 		if (set.getId() == 0) {
-			String sql = "INSERT INTO QUIZ_SETS (name) VALUES (?)";
+			String sql = "INSERT INTO quiz_sets (title) VALUES (?)";
 			try (Connection conn = DriverManager.getConnection(DB_URL);
 			     PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-				pstmt.setString(1, set.getName());
+				pstmt.setString(1, set.getTitle());
 				pstmt.executeUpdate();
 				try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
 					if (generatedKeys.next()) {
@@ -86,10 +86,10 @@ public class QuizSetRepository implements Storeable<QuizSet> {
 				e.printStackTrace();
 			}
 		} else {
-			String sql = "UPDATE QUIZ_SETS SET name = ? WHERE id = ?";
+			String sql = "UPDATE quiz_sets SET title = ? WHERE id = ?";
 			try (Connection conn = DriverManager.getConnection(DB_URL);
 			     PreparedStatement pstmt = conn.prepareStatement(sql)) {
-				pstmt.setString(1, set.getName());
+				pstmt.setString(1, set.getTitle());
 				pstmt.setInt(2, set.getId());
 				pstmt.executeUpdate();
 			} catch (SQLException e) {
@@ -99,7 +99,7 @@ public class QuizSetRepository implements Storeable<QuizSet> {
 	}
 
 	public void deleteById(int id) {
-		String sqlSet = "DELETE FROM QUIZ_SETS WHERE id = ?";
+		String sqlSet = "DELETE FROM quiz_sets WHERE id = ?";
 		try (Connection conn = DriverManager.getConnection(DB_URL);
 		     PreparedStatement pstmt = conn.prepareStatement(sqlSet)) {
 			pstmt.setInt(1, id);

@@ -9,14 +9,14 @@ import java.awt.*;
 import java.util.List;
 
 public class LearningModuleListView extends JFrame {
-	private final LearningModuleController controller;
+	private final LearningModuleController lmController;
 	private final boolean isTeacher;
 	private final JTable table;
 	private final DefaultTableModel tableModel;
 	private List<LearningModule> currentModules;
 
-	public LearningModuleListView(LearningModuleController controller, boolean isTeacher) {
-		this.controller = controller;
+	public LearningModuleListView(LearningModuleController lmController, boolean isTeacher) {
+		this.lmController = lmController;
 		this.isTeacher = isTeacher;
 
 		setTitle("SDG 13: Climate Action - Learning Modules");
@@ -47,10 +47,10 @@ public class LearningModuleListView extends JFrame {
 
 		openBtn.addActionListener(e -> openSelectedModule());
 		createBtn.addActionListener(e -> {
-			controller.createNewModule();
+			lmController.createNewModule();
 			refreshTable();
 			if (!currentModules.isEmpty()) {
-				new LearningModuleView(currentModules.get(currentModules.size() - 1), isTeacher, this, controller);
+				new LearningModuleView(currentModules.getLast(), isTeacher, this, lmController);
 			}
 		});
 		deleteBtn.addActionListener(e -> deleteSelectedModule());
@@ -75,14 +75,14 @@ public class LearningModuleListView extends JFrame {
 		if (JOptionPane.showConfirmDialog(this, "Are you sure?", "Confirm",
 				JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 			int id = currentModules.get(selectedRow).getId();
-			controller.deleteModule(id);
+			lmController.deleteModule(id);
 			refreshTable();
 		}
 	}
 
 	public void refreshTable() {
 		tableModel.setRowCount(0);
-		currentModules = controller.getAllModules();
+		currentModules = lmController.getAllModules();
 		for (LearningModule m : currentModules) {
 			String content = m.getContentText();
 			if (content == null)
@@ -95,7 +95,7 @@ public class LearningModuleListView extends JFrame {
 	private void openSelectedModule() {
 		int selectedRow = table.getSelectedRow();
 		if (selectedRow != -1) {
-			new LearningModuleView(currentModules.get(selectedRow), isTeacher, this, controller);
+			new LearningModuleView(currentModules.get(selectedRow), isTeacher, this, lmController);
 		} else {
 			JOptionPane.showMessageDialog(this, "Select a module first.");
 		}

@@ -12,8 +12,8 @@ import java.awt.*;
 import java.util.List;
 
 public class QuestionView extends JFrame {
-	private final QuestionController controller;
-	private final ScoreboardController scoreboardController;
+	private final QuestionController qsController;
+	private final ScoreboardController sbController;
 	private final String username;
 	private final List<Question> questions;
 	private int currentQuestionIndex = 0;
@@ -26,19 +26,19 @@ public class QuestionView extends JFrame {
 	private final JLabel feedbackLabel;
 	private final JButton nextBtn;
 
-	public QuestionView(QuestionController controller) {
-		this(controller, 1, null, null);
+	public QuestionView(QuestionController qsController) {
+		this(qsController, 1, null, null);
 	}
 
-	public QuestionView(QuestionController controller, int quizSetId) {
-		this(controller, quizSetId, null, null);
+	public QuestionView(QuestionController qsController, int quizSetId) {
+		this(qsController, quizSetId, null, null);
 	}
 
-	public QuestionView(QuestionController controller, int quizSetId, ScoreboardController scoreboardController, String username) {
-		this.controller = controller;
-		this.scoreboardController = scoreboardController;
+	public QuestionView(QuestionController qsController, int quizSetId, ScoreboardController sbController, String username) {
+		this.qsController = qsController;
+		this.sbController = sbController;
 		this.username = username;
-		this.questions = controller.getQuestionsForQuizSet(quizSetId);
+		this.questions = qsController.getQuestionsForQuizSet(quizSetId);
 
 		for (Question q : questions) {
 			maxPossibleScore += q.getPoints();
@@ -158,8 +158,8 @@ public class QuestionView extends JFrame {
 		nextBtn.setVisible(false);
 		questionArea.setText("Quiz Finished!");
 
-		if (scoreboardController != null && username != null && !username.trim().isEmpty()) {
-			scoreboardController.saveScore(username, totalScore);
+		if (sbController != null && username != null && !username.trim().isEmpty()) {
+			sbController.saveScore(username, totalScore);
 		}
 
 		float percentage = questions.isEmpty() ? 0 : ((float) totalCorrect / questions.size()) * 100;

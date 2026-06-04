@@ -11,24 +11,24 @@ import java.awt.*;
 import java.util.List;
 
 public class QuizSetListView extends JFrame {
-	private final QuizSetController quizSetController;
-	private final QuestionController questionController;
-	private final ScoreboardController scoreboardController;
+	private final QuizSetController qSetController;
+	private final QuestionController qsController;
+	private final ScoreboardController sbController;
 	private final boolean isTeacher;
 	private final JTable table;
 	private final DefaultTableModel tableModel;
 	private List<QuizSet> currentQuizSets;
 
-	public QuizSetListView(QuizSetController quizSetController, QuestionController questionController,
+	public QuizSetListView(QuizSetController qSetController, QuestionController qsController,
 	                       boolean isTeacher) {
-		this(quizSetController, questionController, null, isTeacher);
+		this(qSetController, qsController, null, isTeacher);
 	}
 
-	public QuizSetListView(QuizSetController quizSetController, QuestionController questionController,
-	                       ScoreboardController scoreboardController, boolean isTeacher) {
-		this.quizSetController = quizSetController;
-		this.questionController = questionController;
-		this.scoreboardController = scoreboardController;
+	public QuizSetListView(QuizSetController qSetController, QuestionController qsController,
+	                       ScoreboardController sbController, boolean isTeacher) {
+		this.qSetController = qSetController;
+		this.qsController = qsController;
+		this.sbController = sbController;
 		this.isTeacher = isTeacher;
 
 		setTitle("SDG 13: Climate Action - Quiz Sets");
@@ -61,9 +61,9 @@ public class QuizSetListView extends JFrame {
 		startQuizBtn.addActionListener(e -> startSelectedQuiz());
 		manageBtn.addActionListener(e -> openSelectedQuizSet());
 		createBtn.addActionListener(e -> {
-			QuizSet newSet = quizSetController.createNewQuizSet();
+			QuizSet newSet = qSetController.createNewQuizSet();
 			refreshTable();
-			new QuizSetView(newSet, isTeacher, this, quizSetController, questionController);
+			new QuizSetView(newSet, isTeacher, this, qSetController, qsController);
 		});
 		deleteBtn.addActionListener(e -> deleteSelectedQuizSet());
 
@@ -86,7 +86,7 @@ public class QuizSetListView extends JFrame {
 			return;
 		}
 		QuizSet selectedSet = currentQuizSets.get(selectedRow);
-		int questionsCount = questionController.getQuestionsForQuizSet(selectedSet.getId()).size();
+		int questionsCount = qsController.getQuestionsForQuizSet(selectedSet.getId()).size();
 		if (questionsCount == 0) {
 			JOptionPane.showMessageDialog(this, "This quiz set has no questions yet!");
 			return;
@@ -102,13 +102,13 @@ public class QuizSetListView extends JFrame {
 			return;
 		}
 
-		new QuestionView(questionController, selectedSet.getId(), scoreboardController, username);
+		new QuestionView(qsController, selectedSet.getId(), sbController, username);
 	}
 
 	private void openSelectedQuizSet() {
 		int selectedRow = table.getSelectedRow();
 		if (selectedRow != -1) {
-			new QuizSetView(currentQuizSets.get(selectedRow), isTeacher, this, quizSetController, questionController);
+			new QuizSetView(currentQuizSets.get(selectedRow), isTeacher, this, qSetController, qsController);
 		} else {
 			JOptionPane.showMessageDialog(this, "Select a quiz set first.");
 		}
@@ -131,17 +131,17 @@ public class QuizSetListView extends JFrame {
 				"Are you sure you want to delete this quiz set and all its questions?",
 				"Confirm Delete",
 				JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-			quizSetController.deleteQuizSet(selectedSet.getId());
+			qSetController.deleteQuizSet(selectedSet.getId());
 			refreshTable();
 		}
 	}
 
 	public void refreshTable() {
 		tableModel.setRowCount(0);
-		currentQuizSets = quizSetController.getAllQuizSets();
+		currentQuizSets = qSetController.getAllQuizSets();
 		for (QuizSet set : currentQuizSets) {
-			int count = questionController.getQuestionsForQuizSet(set.getId()).size();
-			tableModel.addRow(new Object[]{set.getId(), set.getName(), count});
+			int count = qsController.getQuestionsForQuizSet(set.getId()).size();
+			tableModel.addRow(new Object[]{set.getId(), set.getTitle(), count});
 		}
 	}
 }

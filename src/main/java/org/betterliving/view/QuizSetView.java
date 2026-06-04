@@ -16,8 +16,8 @@ public class QuizSetView extends JFrame {
 	private final QuizSet quizSet;
 	private final boolean isTeacher;
 	private final QuizSetListView parentView;
-	private final QuizSetController quizSetController;
-	private final QuestionController questionController;
+	private final QuizSetController qSetController;
+	private final QuestionController qsController;
 
 	private final JTextField nameField;
 	private final JTable questionTable;
@@ -25,14 +25,14 @@ public class QuizSetView extends JFrame {
 	private List<Question> currentQuestions;
 
 	public QuizSetView(QuizSet quizSet, boolean isTeacher, QuizSetListView parentView,
-	                   QuizSetController quizSetController, QuestionController questionController) {
+	                   QuizSetController qSetController, QuestionController qsController) {
 		this.quizSet = quizSet;
 		this.isTeacher = isTeacher;
 		this.parentView = parentView;
-		this.quizSetController = quizSetController;
-		this.questionController = questionController;
+		this.qSetController = qSetController;
+		this.qsController = qsController;
 
-		setTitle("Managing Quiz Set: " + quizSet.getName());
+		setTitle("Managing Quiz Set: " + quizSet.getTitle());
 		setSize(850, 500);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -43,7 +43,7 @@ public class QuizSetView extends JFrame {
 		topPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
 		JLabel nameLabel = new JLabel("Quiz Set Name: ");
 		nameLabel.setFont(new Font("Arial", Font.BOLD, 14));
-		nameField = new JTextField(quizSet.getName());
+		nameField = new JTextField(quizSet.getTitle());
 		nameField.setFont(new Font("Arial", Font.PLAIN, 16));
 		nameField.setEditable(isTeacher);
 		topPanel.add(nameLabel, BorderLayout.WEST);
@@ -102,9 +102,9 @@ public class QuizSetView extends JFrame {
 		if (isTeacher) {
 			JButton saveBtn = new JButton("Save Changes");
 			saveBtn.addActionListener(e -> {
-				quizSet.setName(nameField.getText());
-				quizSetController.updateQuizSet(quizSet);
-				setTitle("Managing Quiz Set: " + quizSet.getName());
+				quizSet.setTitle(nameField.getText());
+				qSetController.updateQuizSet(quizSet);
+				setTitle("Managing Quiz Set: " + quizSet.getTitle());
 				parentView.refreshTable();
 				JOptionPane.showMessageDialog(this, "Quiz Set updated successfully!");
 			});
@@ -117,7 +117,7 @@ public class QuizSetView extends JFrame {
 
 	private void refreshQuestionsTable() {
 		tableModel.setRowCount(0);
-		currentQuestions = questionController.getQuestionsForQuizSet(quizSet.getId());
+		currentQuestions = qsController.getQuestionsForQuizSet(quizSet.getId());
 		for (Question q : currentQuestions) {
 			String optionsStr = "-";
 			if (q instanceof MultipleChoiceQuestion mcq) {
@@ -144,14 +144,14 @@ public class QuizSetView extends JFrame {
 		if (JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this question?", "Confirm",
 				JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 			int id = currentQuestions.get(selectedRow).getId();
-			questionController.deleteQuestion(id);
+			qsController.deleteQuestion(id);
 			refreshQuestionsTable();
 			parentView.refreshTable(); // Update question count in parent
 		}
 	}
 
 	private void openAddQuestionDialog() {
-		JDialog dialog = new JDialog(this, "Add Question to " + quizSet.getName(), true);
+		JDialog dialog = new JDialog(this, "Add Question to " + quizSet.getTitle(), true);
 		dialog.setSize(500, 400);
 		dialog.setLocationRelativeTo(this);
 		dialog.setLayout(new GridBagLayout());
@@ -269,17 +269,17 @@ public class QuizSetView extends JFrame {
 					JOptionPane.showMessageDialog(dialog, "MCQ Options must contain the correct answer.");
 					return;
 				}
-				questionController.addMultipleChoice(qText, answer, points, optionsList, quizSet.getId());
+				qsController.addMultipleChoice(qText, answer, points, optionsList, quizSet.getId());
 			} else if ("True / False".equals(selectedType)) {
 				boolean answer = Boolean.parseBoolean((String) tfCombo.getSelectedItem());
-				questionController.addTrueFalse(qText, answer, points, quizSet.getId());
+				qsController.addTrueFalse(qText, answer, points, quizSet.getId());
 			} else { // Short Answer
 				String answer = mcqAndShortAnsFd.getText().trim();
 				if (answer.isEmpty()) {
 					JOptionPane.showMessageDialog(dialog, "Please enter a correct answer.");
 					return;
 				}
-				questionController.addShortAnswer(qText, answer, points, quizSet.getId());
+				qsController.addShortAnswer(qText, answer, points, quizSet.getId());
 			}
 
 			dialog.dispose();
