@@ -6,9 +6,13 @@ import org.betterliving.model.question.MultipleChoiceQuestion;
 import org.betterliving.model.question.Question;
 import org.betterliving.model.question.ShortAnswerQuestion;
 import org.betterliving.model.question.TrueFalseQuestion;
+import org.betterliving.model.reward.PerfectScoreBadge;
+import org.betterliving.model.reward.Rewardable;
+import org.betterliving.model.reward.YouTriedBadge;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.List;
 
 public class QuestionView extends JFrame {
@@ -25,14 +29,6 @@ public class QuestionView extends JFrame {
 	private final JPanel inputPanel;
 	private final JLabel feedbackLabel;
 	private final JButton nextBtn;
-
-	public QuestionView(QuestionController qsController) {
-		this(qsController, 1, null, null);
-	}
-
-	public QuestionView(QuestionController qsController, int quizSetId) {
-		this(qsController, quizSetId, null, null);
-	}
 
 	public QuestionView(QuestionController qsController, int quizSetId, ScoreboardController sbController, String name) {
 		this.qsController = qsController;
@@ -158,16 +154,39 @@ public class QuestionView extends JFrame {
 		nextBtn.setVisible(false);
 		questionArea.setText("Quiz Finished!");
 
+		List<Rewardable> rewards = Arrays.asList(
+				new YouTriedBadge(maxPossibleScore, totalScore),
+				new PerfectScoreBadge(maxPossibleScore)
+		);
+
+		List<String> achieved = new java.util.ArrayList<>();
+		int totalBonuses = 0;
+		for (Rewardable reward : rewards) {
+			if (reward.qualifies(totalScore)) {
+				achieved.add(reward.getName());
+				totalBonuses += reward.getBonuses();
+			}
+		}
+
 		if (sbController != null && name != null && !name.trim().isEmpty()) {
-			sbController.saveScore(name, totalScore);
+			sbController.saveScore(name, totalScore + totalBonuses);
 		}
 
 		float percentage = questions.isEmpty() ? 0 : ((float) totalCorrect / questions.size()) * 100;
 		String finalMessage = getMotivationalMessage(percentage);
 
+		StringBuilder rewardText = new StringBuilder();
+		if (!achieved.isEmpty()) {
+			rewardText.append("<br><font color='green'><b>Achievements Unlocked:</b><br>");
+			for (String badge : achieved) {
+				rewardText.append("🏆 ").append(badge).append("<br>");
+			}
+			rewardText.append("Bonus Points: +").append(totalBonuses).append("</font>");
+		}
+
 		String resultText = String.format(
-				"<html><center>Final Score: %d / %d<br>Questions Correct: %d / %d<br>Percentage: %.2f%%<br><br><font color='blue' size='5'>%s</font></center></html>",
-				totalScore, maxPossibleScore, totalCorrect, questions.size(), percentage, finalMessage);
+				"<html><center>Final Score: %d / %d<br>Questions Correct: %d / %d<br>Percentage: %.2f%%<br>%s<br><br><font color='blue' size='5'>%s</font></center></html>",
+				totalScore, maxPossibleScore, totalCorrect, questions.size(), percentage, rewardText, finalMessage);
 
 		feedbackLabel.setText(resultText);
 		feedbackLabel.setFont(new Font("Arial", Font.BOLD, 16));
