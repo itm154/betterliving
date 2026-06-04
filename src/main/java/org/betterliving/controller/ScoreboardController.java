@@ -13,7 +13,9 @@ public class ScoreboardController {
 	}
 
 	public List<Student> getAllScores() {
-		return repository.findAll();
+		List<Student> scores = repository.findAll();
+		scores.sort(null);
+		return scores;
 	}
 
 	public void saveScore(String name, int points) {
