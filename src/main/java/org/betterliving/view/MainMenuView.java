@@ -1,3 +1,9 @@
+// Class : MainMenuView (UserDashboardView)
+// Contributor : Adryana Nathalia
+// Tester : Muhammad Ashrul Fahmi
+// Explanataion : Main dashboard connecting all controllers (QuizSet, Question,
+//              LearningModule, Scoreboard). Provides unified interface for users
+
 package org.betterliving.view;
 
 import org.betterliving.controller.LearningModuleController;
