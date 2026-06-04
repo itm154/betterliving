@@ -16,11 +16,11 @@ public class ScoreboardController {
 		return repository.findAll();
 	}
 
-	public void saveScore(String username, int points) {
-		if (username == null || username.trim().isEmpty()) {
+	public void saveScore(String name, int points) {
+		if (name == null || name.trim().isEmpty()) {
 			return;
 		}
-		String name = username.trim();
+		name = name.trim();
 		Student student = repository.findByName(name);
 		if (student == null) {
 			student = new Student(name, 0);

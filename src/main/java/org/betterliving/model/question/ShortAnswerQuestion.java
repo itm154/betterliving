@@ -19,8 +19,8 @@ public class ShortAnswerQuestion extends Question {
 	}
 
 	@Override
-	public String getQuestionType() {
-		return "SA";
+	public QuestionType getQuestionType() {
+		return QuestionType.SA;
 	}
 
 	@Override

@@ -14,7 +14,7 @@ import java.util.List;
 public class QuestionView extends JFrame {
 	private final QuestionController qsController;
 	private final ScoreboardController sbController;
-	private final String username;
+	private final String name;
 	private final List<Question> questions;
 	private int currentQuestionIndex = 0;
 	private int totalScore = 0;
@@ -34,10 +34,10 @@ public class QuestionView extends JFrame {
 		this(qsController, quizSetId, null, null);
 	}
 
-	public QuestionView(QuestionController qsController, int quizSetId, ScoreboardController sbController, String username) {
+	public QuestionView(QuestionController qsController, int quizSetId, ScoreboardController sbController, String name) {
 		this.qsController = qsController;
 		this.sbController = sbController;
-		this.username = username;
+		this.name = name;
 		this.questions = qsController.getQuestionsForQuizSet(quizSetId);
 
 		for (Question q : questions) {
@@ -158,8 +158,8 @@ public class QuestionView extends JFrame {
 		nextBtn.setVisible(false);
 		questionArea.setText("Quiz Finished!");
 
-		if (sbController != null && username != null && !username.trim().isEmpty()) {
-			sbController.saveScore(username, totalScore);
+		if (sbController != null && name != null && !name.trim().isEmpty()) {
+			sbController.saveScore(name, totalScore);
 		}
 
 		float percentage = questions.isEmpty() ? 0 : ((float) totalCorrect / questions.size()) * 100;

@@ -92,17 +92,17 @@ public class QuizSetListView extends JFrame {
 			return;
 		}
 
-		String username = JOptionPane.showInputDialog(this, "Enter your username to start the quiz:");
-		if (username == null) {
+		String name = JOptionPane.showInputDialog(this, "Enter your name to start the quiz:");
+		if (name == null) {
 			return; // User clicked Cancel
 		}
-		username = username.trim();
-		if (username.isEmpty()) {
-			JOptionPane.showMessageDialog(this, "Username cannot be empty. Quiz not started.");
+		name = name.trim();
+		if (name.isEmpty()) {
+			JOptionPane.showMessageDialog(this, "Name cannot be empty. Quiz not started.");
 			return;
 		}
 
-		new QuestionView(qsController, selectedSet.getId(), sbController, username);
+		new QuestionView(qsController, selectedSet.getId(), sbController, name);
 	}
 
 	private void openSelectedQuizSet() {

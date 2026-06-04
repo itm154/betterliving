@@ -125,7 +125,7 @@ public class QuizSetView extends JFrame {
 			}
 			tableModel.addRow(new Object[]{
 					q.getId(),
-					q.getQuestionType(),
+					q.getQuestionType().getCode(),
 					q.getPoints(),
 					q.getQuestionText(),
 					q.getCorrectAnswer(),

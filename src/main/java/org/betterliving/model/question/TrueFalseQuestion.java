@@ -20,8 +20,8 @@ public class TrueFalseQuestion extends Question {
 	}
 
 	@Override
-	public String getQuestionType() {
-		return "TF";
+	public QuestionType getQuestionType() {
+		return QuestionType.TF;
 	}
 
 	@Override

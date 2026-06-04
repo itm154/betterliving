@@ -15,14 +15,6 @@ public class ScoreboardListView extends JFrame {
 	private final JTable table;
 	private List<Student> currentStudents;
 
-	public ScoreboardListView() {
-		this(new ScoreboardController(new org.betterliving.repository.ScoreboardRepository()), false);
-	}
-
-	public ScoreboardListView(ScoreboardController sbController) {
-		this(sbController, false);
-	}
-
 	public ScoreboardListView(ScoreboardController sbController, boolean isTeacher) {
 		this.sbController = sbController;
 		this.isTeacher = isTeacher;
@@ -33,7 +25,7 @@ public class ScoreboardListView extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLayout(new BorderLayout(15, 15));
 
-		String[] columns = {"ID", "Username", "Total Score"};
+		String[] columns = {"ID", "Name", "Total Score"};
 		tableModel = new DefaultTableModel(columns, 0) {
 			@Override
 			public boolean isCellEditable(int row, int column) {

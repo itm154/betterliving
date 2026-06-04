@@ -1,9 +1,6 @@
 package org.betterliving.repository;
 
-import org.betterliving.model.question.MultipleChoiceQuestion;
-import org.betterliving.model.question.Question;
-import org.betterliving.model.question.ShortAnswerQuestion;
-import org.betterliving.model.question.TrueFalseQuestion;
+import org.betterliving.model.question.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -44,7 +41,7 @@ public class QuestionRepository implements Storable<Question> {
 		String sql = "INSERT INTO questions (type, text, correct_answer, points, mcq_options, quiz_set_id) VALUES (?, ?, ?, ?, ?, ?)";
 		try (Connection conn = DriverManager.getConnection(DB_URL);
 		     PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-			pstmt.setString(1, q.getQuestionType());
+			pstmt.setString(1, q.getQuestionType().getCode());
 			pstmt.setString(2, q.getQuestionText());
 			pstmt.setString(3, q.getCorrectAnswer());
 			pstmt.setInt(4, q.getPoints());
@@ -120,14 +117,14 @@ public class QuestionRepository implements Storable<Question> {
 		String optionsRaw = rs.getString("mcq_options");
 		int quizSetId = rs.getInt("quiz_set_id");
 
-		Question q = switch (type) {
-			case "MC" -> {
+		QuestionType qType = QuestionType.fromCode(type);
+		Question q = switch (qType) {
+			case MC -> {
 				List<String> options = (optionsRaw != null) ? Arrays.asList(optionsRaw.split("\\|\\|")) : new ArrayList<>();
 				yield new MultipleChoiceQuestion(id, text, ans, points, options);
 			}
-			case "SA" -> new ShortAnswerQuestion(id, text, ans, points);
-			case "TF" -> new TrueFalseQuestion(id, text, Boolean.parseBoolean(ans), points);
-			default -> throw new IllegalArgumentException("Unknown question type: " + type);
+			case SA -> new ShortAnswerQuestion(id, text, ans, points);
+			case TF -> new TrueFalseQuestion(id, text, Boolean.parseBoolean(ans), points);
 		};
 		q.setQuizSetId(quizSetId);
 		return q;

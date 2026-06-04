@@ -43,7 +43,7 @@ public abstract class Question implements Identifiable, Scorable {
 		return points;
 	}
 
-	public abstract String getQuestionType();
+	public abstract QuestionType getQuestionType();
 
 	public abstract String getCorrectAnswer();
 

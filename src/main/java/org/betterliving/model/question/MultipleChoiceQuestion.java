@@ -28,8 +28,8 @@ public class MultipleChoiceQuestion extends Question {
 	}
 
 	@Override
-	public String getQuestionType() {
-		return "MC";
+	public QuestionType getQuestionType() {
+		return QuestionType.MC;
 	}
 
 	@Override
