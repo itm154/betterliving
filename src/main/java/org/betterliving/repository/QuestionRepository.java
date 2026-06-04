@@ -1,6 +1,9 @@
 package org.betterliving.repository;
 
-import org.betterliving.model.question.*;
+import org.betterliving.model.question.MultipleChoiceQuestion;
+import org.betterliving.model.question.Question;
+import org.betterliving.model.question.ShortAnswerQuestion;
+import org.betterliving.model.question.TrueFalseQuestion;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -40,7 +43,7 @@ public class QuestionRepository implements Storeable<Question> {
 	public void save(Question q) {
 		String sql = "INSERT INTO QUESTIONS (type, text, correct_answer, points, mcq_options, quiz_set_id) VALUES (?, ?, ?, ?, ?, ?)";
 		try (Connection conn = DriverManager.getConnection(DB_URL);
-				PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+		     PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 			pstmt.setString(1, q.getQuestionType());
 			pstmt.setString(2, q.getQuestionText());
 			pstmt.setString(3, q.getCorrectAnswer());
@@ -69,8 +72,8 @@ public class QuestionRepository implements Storeable<Question> {
 		List<Question> questions = new ArrayList<>();
 		String sql = "SELECT * FROM QUESTIONS";
 		try (Connection conn = DriverManager.getConnection(DB_URL);
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(sql)) {
+		     Statement stmt = conn.createStatement();
+		     ResultSet rs = stmt.executeQuery(sql)) {
 			while (rs.next()) {
 				questions.add(mapResultSetToQuestion(rs));
 			}
@@ -84,7 +87,7 @@ public class QuestionRepository implements Storeable<Question> {
 		List<Question> questions = new ArrayList<>();
 		String sql = "SELECT * FROM QUESTIONS WHERE quiz_set_id = ?";
 		try (Connection conn = DriverManager.getConnection(DB_URL);
-				PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		     PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, quizSetId);
 			try (ResultSet rs = pstmt.executeQuery()) {
 				while (rs.next()) {
@@ -100,7 +103,7 @@ public class QuestionRepository implements Storeable<Question> {
 	public void deleteById(int id) {
 		String sql = "DELETE FROM QUESTIONS WHERE id = ?";
 		try (Connection conn = DriverManager.getConnection(DB_URL);
-				PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		     PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, id);
 			pstmt.executeUpdate();
 		} catch (SQLException e) {

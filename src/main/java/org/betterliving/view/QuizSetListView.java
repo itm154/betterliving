@@ -1,7 +1,7 @@
 package org.betterliving.view;
 
-import org.betterliving.controller.QuizSetController;
 import org.betterliving.controller.QuestionController;
+import org.betterliving.controller.QuizSetController;
 import org.betterliving.controller.ScoreboardController;
 import org.betterliving.model.QuizSet;
 
@@ -15,17 +15,17 @@ public class QuizSetListView extends JFrame {
 	private final QuestionController questionController;
 	private final ScoreboardController scoreboardController;
 	private final boolean isTeacher;
-	private JTable table;
-	private DefaultTableModel tableModel;
+	private final JTable table;
+	private final DefaultTableModel tableModel;
 	private List<QuizSet> currentQuizSets;
 
 	public QuizSetListView(QuizSetController quizSetController, QuestionController questionController,
-			boolean isTeacher) {
+	                       boolean isTeacher) {
 		this(quizSetController, questionController, null, isTeacher);
 	}
 
 	public QuizSetListView(QuizSetController quizSetController, QuestionController questionController,
-			ScoreboardController scoreboardController, boolean isTeacher) {
+	                       ScoreboardController scoreboardController, boolean isTeacher) {
 		this.quizSetController = quizSetController;
 		this.questionController = questionController;
 		this.scoreboardController = scoreboardController;
@@ -37,7 +37,7 @@ public class QuizSetListView extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLayout(new BorderLayout(10, 10));
 
-		String[] columns = { "Quiz Set ID", "Quiz Name", "Number of Questions" };
+		String[] columns = {"Quiz Set ID", "Quiz Name", "Number of Questions"};
 		tableModel = new DefaultTableModel(columns, 0) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
@@ -141,7 +141,7 @@ public class QuizSetListView extends JFrame {
 		currentQuizSets = quizSetController.getAllQuizSets();
 		for (QuizSet set : currentQuizSets) {
 			int count = questionController.getQuestionsForQuizSet(set.getId()).size();
-			tableModel.addRow(new Object[] { set.getId(), set.getName(), count });
+			tableModel.addRow(new Object[]{set.getId(), set.getName(), count});
 		}
 	}
 }

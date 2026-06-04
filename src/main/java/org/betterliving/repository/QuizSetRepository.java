@@ -1,6 +1,7 @@
 package org.betterliving.repository;
 
 import org.betterliving.model.QuizSet;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +39,8 @@ public class QuizSetRepository implements Storeable<QuizSet> {
 		List<QuizSet> sets = new ArrayList<>();
 		String sql = "SELECT * FROM QUIZ_SETS";
 		try (Connection conn = DriverManager.getConnection(DB_URL);
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(sql)) {
+		     Statement stmt = conn.createStatement();
+		     ResultSet rs = stmt.executeQuery(sql)) {
 			while (rs.next()) {
 				sets.add(new QuizSet(rs.getInt("id"), rs.getString("name")));
 			}
@@ -52,7 +53,7 @@ public class QuizSetRepository implements Storeable<QuizSet> {
 	public QuizSet findById(int id) {
 		String sql = "SELECT * FROM QUIZ_SETS WHERE id = ?";
 		try (Connection conn = DriverManager.getConnection(DB_URL);
-				PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		     PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, id);
 			try (ResultSet rs = pstmt.executeQuery()) {
 				if (rs.next()) {
@@ -73,7 +74,7 @@ public class QuizSetRepository implements Storeable<QuizSet> {
 		if (set.getId() == 0) {
 			String sql = "INSERT INTO QUIZ_SETS (name) VALUES (?)";
 			try (Connection conn = DriverManager.getConnection(DB_URL);
-					PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+			     PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 				pstmt.setString(1, set.getName());
 				pstmt.executeUpdate();
 				try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
@@ -87,7 +88,7 @@ public class QuizSetRepository implements Storeable<QuizSet> {
 		} else {
 			String sql = "UPDATE QUIZ_SETS SET name = ? WHERE id = ?";
 			try (Connection conn = DriverManager.getConnection(DB_URL);
-					PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			     PreparedStatement pstmt = conn.prepareStatement(sql)) {
 				pstmt.setString(1, set.getName());
 				pstmt.setInt(2, set.getId());
 				pstmt.executeUpdate();
@@ -100,7 +101,7 @@ public class QuizSetRepository implements Storeable<QuizSet> {
 	public void deleteById(int id) {
 		String sqlSet = "DELETE FROM QUIZ_SETS WHERE id = ?";
 		try (Connection conn = DriverManager.getConnection(DB_URL);
-				PreparedStatement pstmt = conn.prepareStatement(sqlSet)) {
+		     PreparedStatement pstmt = conn.prepareStatement(sqlSet)) {
 			pstmt.setInt(1, id);
 			pstmt.executeUpdate();
 		} catch (SQLException e) {

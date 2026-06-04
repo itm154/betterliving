@@ -1,6 +1,7 @@
 package org.betterliving.repository;
 
 import org.betterliving.model.user.Student;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +36,8 @@ public class ScoreboardRepository implements Storeable<Student> {
 		List<Student> students = new ArrayList<>();
 		String sql = "SELECT * FROM SCOREBOARD ORDER BY score DESC";
 		try (Connection conn = DriverManager.getConnection(DB_URL);
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(sql)) {
+		     Statement stmt = conn.createStatement();
+		     ResultSet rs = stmt.executeQuery(sql)) {
 			while (rs.next()) {
 				Student s = new Student(rs.getString("name"), rs.getInt("id"));
 				s.addScore(rs.getInt("score"));
@@ -51,7 +52,7 @@ public class ScoreboardRepository implements Storeable<Student> {
 	public Student findByName(String name) {
 		String sql = "SELECT * FROM SCOREBOARD WHERE name = ?";
 		try (Connection conn = DriverManager.getConnection(DB_URL);
-				PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		     PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, name);
 			try (ResultSet rs = pstmt.executeQuery()) {
 				if (rs.next()) {
@@ -71,7 +72,7 @@ public class ScoreboardRepository implements Storeable<Student> {
 		if (student.getId() == 0) {
 			String sql = "INSERT INTO SCOREBOARD (name, score) VALUES (?, ?)";
 			try (Connection conn = DriverManager.getConnection(DB_URL);
-					PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+			     PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 				pstmt.setString(1, student.getName());
 				pstmt.setInt(2, student.getScore());
 				pstmt.executeUpdate();
@@ -86,7 +87,7 @@ public class ScoreboardRepository implements Storeable<Student> {
 		} else {
 			String sql = "UPDATE SCOREBOARD SET name = ?, score = ? WHERE id = ?";
 			try (Connection conn = DriverManager.getConnection(DB_URL);
-					PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			     PreparedStatement pstmt = conn.prepareStatement(sql)) {
 				pstmt.setString(1, student.getName());
 				pstmt.setInt(2, student.getScore());
 				pstmt.setInt(3, student.getId());
@@ -101,7 +102,7 @@ public class ScoreboardRepository implements Storeable<Student> {
 	public void deleteById(int id) {
 		String sql = "DELETE FROM SCOREBOARD WHERE id = ?";
 		try (Connection conn = DriverManager.getConnection(DB_URL);
-				PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		     PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, id);
 			pstmt.executeUpdate();
 		} catch (SQLException e) {

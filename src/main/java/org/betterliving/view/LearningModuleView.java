@@ -5,7 +5,6 @@ import org.betterliving.model.LearningModule;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 
 public class LearningModuleView extends JFrame {
 	private final LearningModule module;
@@ -13,12 +12,12 @@ public class LearningModuleView extends JFrame {
 	private final LearningModuleController controller;
 	private final boolean isTeacher;
 
-	private JTextField titleField;
-	private JTextArea contentArea;
-	private JLabel imageLabel;
+	private final JTextField titleField;
+	private final JTextArea contentArea;
+	private final JLabel imageLabel;
 
 	public LearningModuleView(LearningModule module, boolean isTeacher, LearningModuleListView parentView,
-			LearningModuleController controller) {
+	                          LearningModuleController controller) {
 		this.module = module;
 		this.parentView = parentView;
 		this.controller = controller;

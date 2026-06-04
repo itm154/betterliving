@@ -1,14 +1,14 @@
 package org.betterliving.model.question;
 
-import java.util.List;
-
 import org.betterliving.model.Identifiable;
 import org.betterliving.model.Scorable;
 
+import java.util.List;
+
 public abstract class Question implements Identifiable, Scorable {
-	private int id;
 	private final String text;
 	private final int points;
+	private int id;
 	private int quizSetId = 1;
 
 	protected Question(String text, int points) {

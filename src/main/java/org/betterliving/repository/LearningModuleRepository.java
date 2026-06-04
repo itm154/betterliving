@@ -1,6 +1,7 @@
 package org.betterliving.repository;
 
 import org.betterliving.model.LearningModule;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +36,8 @@ public class LearningModuleRepository implements Storeable<LearningModule> {
 		List<LearningModule> modules = new ArrayList<>();
 		String sql = "SELECT * FROM LEARNING_MODULES";
 		try (Connection conn = DriverManager.getConnection(DB_URL);
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(sql)) {
+		     Statement stmt = conn.createStatement();
+		     ResultSet rs = stmt.executeQuery(sql)) {
 			while (rs.next()) {
 				modules.add(new LearningModule(
 						rs.getInt("ID"),
@@ -54,7 +55,7 @@ public class LearningModuleRepository implements Storeable<LearningModule> {
 		if (module.getId() == 0) {
 			String sql = "INSERT INTO LEARNING_MODULES (TITLE, CONTENT, IMAGE_DATA) VALUES (?, ?, ?)";
 			try (Connection conn = DriverManager.getConnection(DB_URL);
-					PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+			     PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 				pstmt.setString(1, module.getTitle());
 				pstmt.setString(2, module.getContentText());
 				if (module.getImageBytes() != null) {
@@ -74,7 +75,7 @@ public class LearningModuleRepository implements Storeable<LearningModule> {
 		} else {
 			String sql = "UPDATE LEARNING_MODULES SET TITLE = ?, CONTENT = ?, IMAGE_DATA = ? WHERE ID = ?";
 			try (Connection conn = DriverManager.getConnection(DB_URL);
-					PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			     PreparedStatement pstmt = conn.prepareStatement(sql)) {
 				pstmt.setString(1, module.getTitle());
 				pstmt.setString(2, module.getContentText());
 				if (module.getImageBytes() != null) {
@@ -93,7 +94,7 @@ public class LearningModuleRepository implements Storeable<LearningModule> {
 	public void deleteById(int id) {
 		String sql = "DELETE FROM LEARNING_MODULES WHERE ID = ?";
 		try (Connection conn = DriverManager.getConnection(DB_URL);
-				PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		     PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, id);
 			pstmt.executeUpdate();
 		} catch (SQLException e) {

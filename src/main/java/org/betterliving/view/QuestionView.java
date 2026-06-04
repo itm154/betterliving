@@ -2,7 +2,10 @@ package org.betterliving.view;
 
 import org.betterliving.controller.QuestionController;
 import org.betterliving.controller.ScoreboardController;
-import org.betterliving.model.question.*;
+import org.betterliving.model.question.MultipleChoiceQuestion;
+import org.betterliving.model.question.Question;
+import org.betterliving.model.question.ShortAnswerQuestion;
+import org.betterliving.model.question.TrueFalseQuestion;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,18 +13,18 @@ import java.util.List;
 
 public class QuestionView extends JFrame {
 	private final QuestionController controller;
-	private ScoreboardController scoreboardController;
-	private String username;
-	private List<Question> questions;
+	private final ScoreboardController scoreboardController;
+	private final String username;
+	private final List<Question> questions;
 	private int currentQuestionIndex = 0;
 	private int totalScore = 0;
 	private int maxPossibleScore = 0;
 	private int totalCorrect = 0;
 
-	private JTextArea questionArea;
-	private JPanel inputPanel;
-	private JLabel feedbackLabel;
-	private JButton nextBtn;
+	private final JTextArea questionArea;
+	private final JPanel inputPanel;
+	private final JLabel feedbackLabel;
+	private final JButton nextBtn;
 
 	public QuestionView(QuestionController controller) {
 		this(controller, 1, null, null);

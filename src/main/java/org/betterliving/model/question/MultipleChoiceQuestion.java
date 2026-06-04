@@ -1,7 +1,7 @@
 package org.betterliving.model.question;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MultipleChoiceQuestion extends Question {
 	private final String correctAnswer;

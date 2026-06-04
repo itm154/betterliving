@@ -11,8 +11,8 @@ import java.util.List;
 public class LearningModuleListView extends JFrame {
 	private final LearningModuleController controller;
 	private final boolean isTeacher;
-	private JTable table;
-	private DefaultTableModel tableModel;
+	private final JTable table;
+	private final DefaultTableModel tableModel;
 	private List<LearningModule> currentModules;
 
 	public LearningModuleListView(LearningModuleController controller, boolean isTeacher) {
@@ -25,7 +25,7 @@ public class LearningModuleListView extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLayout(new BorderLayout(10, 10));
 
-		String[] columns = { "Module ID", "Topic Title", "Content Preview" };
+		String[] columns = {"Module ID", "Topic Title", "Content Preview"};
 		tableModel = new DefaultTableModel(columns, 0) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
@@ -88,7 +88,7 @@ public class LearningModuleListView extends JFrame {
 			if (content == null)
 				content = "";
 			String snippet = content.length() > 60 ? content.substring(0, 57) + "..." : content;
-			tableModel.addRow(new Object[] { m.getId(), m.getTitle(), snippet });
+			tableModel.addRow(new Object[]{m.getId(), m.getTitle(), snippet});
 		}
 	}
 

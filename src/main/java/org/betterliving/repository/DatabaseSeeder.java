@@ -1,6 +1,7 @@
 package org.betterliving.repository;
 
 import org.betterliving.controller.QuestionController;
+
 import java.util.Arrays;
 
 public class DatabaseSeeder {

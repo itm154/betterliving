@@ -1,7 +1,7 @@
 package org.betterliving.view;
 
-import org.betterliving.controller.QuestionController;
 import org.betterliving.controller.LearningModuleController;
+import org.betterliving.controller.QuestionController;
 import org.betterliving.controller.QuizSetController;
 import org.betterliving.controller.ScoreboardController;
 
@@ -23,14 +23,14 @@ public class MainMenuView extends JFrame {
 	}
 
 	public MainMenuView(QuestionController qscontroller, LearningModuleController lmcontroller,
-			QuizSetController quizSetController, boolean isTeacher) {
+	                    QuizSetController quizSetController, boolean isTeacher) {
 		this(qscontroller, lmcontroller, quizSetController,
 				new org.betterliving.controller.ScoreboardController(new org.betterliving.repository.ScoreboardRepository()),
 				isTeacher);
 	}
 
 	public MainMenuView(QuestionController qscontroller, LearningModuleController lmcontroller,
-			QuizSetController quizSetController, ScoreboardController scoreboardController, boolean isTeacher) {
+	                    QuizSetController quizSetController, ScoreboardController scoreboardController, boolean isTeacher) {
 		this.isTeacher = isTeacher;
 		this.controller = qscontroller;
 		this.moduleController = lmcontroller;

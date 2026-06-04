@@ -2,25 +2,17 @@ package org.betterliving.view;
 
 import org.betterliving.controller.ScoreboardController;
 import org.betterliving.model.user.Student;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.util.List;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.table.DefaultTableModel;
-
 public class ScoreboardListView extends JFrame {
-	private DefaultTableModel tableModel;
-	private JTable table;
 	private final ScoreboardController controller;
 	private final boolean isTeacher;
+	private final DefaultTableModel tableModel;
+	private final JTable table;
 	private List<Student> currentStudents;
 
 	public ScoreboardListView() {
@@ -41,7 +33,7 @@ public class ScoreboardListView extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLayout(new BorderLayout(15, 15));
 
-		String[] columns = { "ID", "Username", "Total Score" };
+		String[] columns = {"ID", "Username", "Total Score"};
 		tableModel = new DefaultTableModel(columns, 0) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
@@ -91,7 +83,7 @@ public class ScoreboardListView extends JFrame {
 		tableModel.setRowCount(0);
 		currentStudents = controller.getAllScores();
 		for (Student s : currentStudents) {
-			tableModel.addRow(new Object[] { s.getId(), s.getName(), s.getScore() });
+			tableModel.addRow(new Object[]{s.getId(), s.getName(), s.getScore()});
 		}
 	}
 }

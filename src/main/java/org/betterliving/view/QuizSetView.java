@@ -1,10 +1,10 @@
 package org.betterliving.view;
 
-import org.betterliving.controller.QuizSetController;
 import org.betterliving.controller.QuestionController;
+import org.betterliving.controller.QuizSetController;
 import org.betterliving.model.QuizSet;
-import org.betterliving.model.question.Question;
 import org.betterliving.model.question.MultipleChoiceQuestion;
+import org.betterliving.model.question.Question;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -19,13 +19,13 @@ public class QuizSetView extends JFrame {
 	private final QuizSetController quizSetController;
 	private final QuestionController questionController;
 
-	private JTextField nameField;
-	private JTable questionTable;
-	private DefaultTableModel tableModel;
+	private final JTextField nameField;
+	private final JTable questionTable;
+	private final DefaultTableModel tableModel;
 	private List<Question> currentQuestions;
 
 	public QuizSetView(QuizSet quizSet, boolean isTeacher, QuizSetListView parentView,
-			QuizSetController quizSetController, QuestionController questionController) {
+	                   QuizSetController quizSetController, QuestionController questionController) {
 		this.quizSet = quizSet;
 		this.isTeacher = isTeacher;
 		this.parentView = parentView;
@@ -58,7 +58,7 @@ public class QuizSetView extends JFrame {
 		tableTitleLabel.setFont(new Font("Arial", Font.BOLD, 14));
 		centerPanel.add(tableTitleLabel, BorderLayout.NORTH);
 
-		String[] columns = { "ID", "Type", "Points", "Question Text", "Correct Answer", "MCQ Options" };
+		String[] columns = {"ID", "Type", "Points", "Question Text", "Correct Answer", "MCQ Options"};
 		tableModel = new DefaultTableModel(columns, 0) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
@@ -123,7 +123,7 @@ public class QuizSetView extends JFrame {
 			if (q instanceof MultipleChoiceQuestion mcq) {
 				optionsStr = String.join(", ", mcq.getOptions());
 			}
-			tableModel.addRow(new Object[] {
+			tableModel.addRow(new Object[]{
 					q.getId(),
 					q.getQuestionType(),
 					q.getPoints(),
@@ -166,7 +166,7 @@ public class QuizSetView extends JFrame {
 		dialog.add(new JLabel("Question Type:"), gbc);
 
 		gbc.gridx = 1;
-		String[] types = { "Multiple Choice", "True / False", "Short Answer" };
+		String[] types = {"Multiple Choice", "True / False", "Short Answer"};
 		JComboBox<String> typeCombo = new JComboBox<>(types);
 		dialog.add(typeCombo, gbc);
 
@@ -198,7 +198,7 @@ public class QuizSetView extends JFrame {
 		// Swap answer fields depending on question type
 		JPanel answerPanel = new JPanel(new CardLayout());
 		JTextField mcqAndShortAnsFd = new JTextField(20);
-		JComboBox<String> tfCombo = new JComboBox<>(new String[] { "true", "false" });
+		JComboBox<String> tfCombo = new JComboBox<>(new String[]{"true", "false"});
 
 		answerPanel.add(mcqAndShortAnsFd, "TEXT");
 		answerPanel.add(tfCombo, "TF");

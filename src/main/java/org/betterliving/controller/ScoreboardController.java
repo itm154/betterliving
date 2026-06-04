@@ -2,6 +2,7 @@ package org.betterliving.controller;
 
 import org.betterliving.model.user.Student;
 import org.betterliving.repository.ScoreboardRepository;
+
 import java.util.List;
 
 public class ScoreboardController {
