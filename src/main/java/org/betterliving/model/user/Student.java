@@ -1,12 +1,18 @@
 package org.betterliving.model.user;
 
+import org.betterliving.model.reward.Rewardable;
+
+import java.util.List;
+
 public class Student extends User implements Comparable<Student> {
 
 	private int score;
+	private final List<Rewardable> badges;
 
 	public Student(String name, int id) {
 		super(name, id);
 		this.score = 0;
+		this.badges = new java.util.ArrayList<>();
 	}
 
 	public int getScore() {
@@ -19,6 +25,14 @@ public class Student extends User implements Comparable<Student> {
 
 	public void resetScore() {
 		score = 0;
+	}
+
+	public void addBadge(Rewardable badge) {
+		this.badges.add(badge);
+	}
+
+	public List<Rewardable> getAllBadges() {
+		return badges;
 	}
 
 	@Override

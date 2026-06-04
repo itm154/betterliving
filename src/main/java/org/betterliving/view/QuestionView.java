@@ -12,6 +12,7 @@ import org.betterliving.model.reward.YouTriedBadge;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -159,26 +160,28 @@ public class QuestionView extends JFrame {
 				new PerfectScoreBadge(maxPossibleScore)
 		);
 
-		List<String> achieved = new java.util.ArrayList<>();
+		List<Rewardable> achievedBadges = new ArrayList<>();
+		List<String> achievedNames = new ArrayList<>();
 		int totalBonuses = 0;
 		for (Rewardable reward : rewards) {
 			if (reward.qualifies(totalScore)) {
-				achieved.add(reward.getName());
+				achievedBadges.add(reward);
+				achievedNames.add(reward.getName());
 				totalBonuses += reward.getBonuses();
 			}
 		}
 
 		if (sbController != null && name != null && !name.trim().isEmpty()) {
-			sbController.saveScore(name, totalScore + totalBonuses);
+			sbController.saveScore(name, totalScore + totalBonuses, achievedBadges);
 		}
 
 		float percentage = questions.isEmpty() ? 0 : ((float) totalCorrect / questions.size()) * 100;
 		String finalMessage = getMotivationalMessage(percentage);
 
 		StringBuilder rewardText = new StringBuilder();
-		if (!achieved.isEmpty()) {
+		if (!achievedNames.isEmpty()) {
 			rewardText.append("<br><font color='green'><b>Achievements Unlocked:</b><br>");
-			for (String badge : achieved) {
+			for (String badge : achievedNames) {
 				rewardText.append("🏆 ").append(badge).append("<br>");
 			}
 			rewardText.append("Bonus Points: +").append(totalBonuses).append("</font>");

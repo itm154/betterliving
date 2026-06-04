@@ -1,6 +1,7 @@
 package org.betterliving.view;
 
 import org.betterliving.controller.ScoreboardController;
+import org.betterliving.model.reward.Rewardable;
 import org.betterliving.model.user.Student;
 
 import javax.swing.*;
@@ -43,15 +44,43 @@ public class ScoreboardListView extends JFrame {
 
 		JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		JButton deleteBtn = new JButton("Delete Selected");
+		JButton infoBtn = new JButton("See Achievements");
 
 		deleteBtn.addActionListener(e -> deleteSelectedScore());
+		infoBtn.addActionListener(e -> showStudentInfo());
 
+		actionPanel.add(infoBtn);
 		if (isTeacher) {
 			actionPanel.add(deleteBtn);
 		}
 		add(actionPanel, BorderLayout.SOUTH);
 
 		setVisible(true);
+	}
+
+	private void showStudentInfo() {
+		int selectedRow = table.getSelectedRow();
+		if (selectedRow == -1) {
+			JOptionPane.showMessageDialog(this, "Please select a student record to see achievements.");
+			return;
+		}
+
+		Student selectedStudent = currentStudents.get(selectedRow);
+		List<Rewardable> badges = selectedStudent.getAllBadges();
+
+		StringBuilder message = new StringBuilder();
+		message.append("Student Name: ").append(selectedStudent.getName()).append("\n");
+		message.append("Score: ").append(selectedStudent.getScore()).append("\n\n");
+		message.append("Achievements/Badges Earned:\n");
+		if (badges == null || badges.isEmpty()) {
+			message.append("- No badges earned yet.\n");
+		} else {
+			for (Rewardable badge : badges) {
+				message.append("🏆 ").append(badge.getName()).append(" - ").append(badge.getDesc()).append("\n");
+			}
+		}
+
+		JOptionPane.showMessageDialog(this, message.toString(), "Student Achievements", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	private void deleteSelectedScore() {

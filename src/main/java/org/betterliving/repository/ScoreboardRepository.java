@@ -1,5 +1,8 @@
 package org.betterliving.repository;
 
+import org.betterliving.model.reward.PerfectScoreBadge;
+import org.betterliving.model.reward.Rewardable;
+import org.betterliving.model.reward.YouTriedBadge;
 import org.betterliving.model.user.Student;
 
 import java.sql.*;
@@ -16,7 +19,8 @@ public class ScoreboardRepository implements Storable<Student> {
 					stmt.execute("CREATE TABLE scoreboard (" +
 							"id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY, " +
 							"name VARCHAR(255), " +
-							"score INT)");
+							"score INT, " +
+							"badges VARCHAR(1000))");
 				}
 			}
 		} catch (SQLException e) {
@@ -31,6 +35,19 @@ public class ScoreboardRepository implements Storable<Student> {
 		}
 	}
 
+	private void loadBadges(Student s, String badgesRaw) {
+		if (badgesRaw != null && !badgesRaw.trim().isEmpty()) {
+			String[] names = badgesRaw.split("\\|\\|");
+			for (String bName : names) {
+				if ("Perfect Score Badge".equals(bName)) {
+					s.addBadge(new PerfectScoreBadge(0));
+				} else if ("You Tried Badge".equals(bName)) {
+					s.addBadge(new YouTriedBadge());
+				}
+			}
+		}
+	}
+
 	@Override
 	public List<Student> findAll() {
 		List<Student> students = new ArrayList<>();
@@ -41,6 +58,7 @@ public class ScoreboardRepository implements Storable<Student> {
 			while (rs.next()) {
 				Student s = new Student(rs.getString("name"), rs.getInt("id"));
 				s.addScore(rs.getInt("score"));
+				loadBadges(s, rs.getString("badges"));
 				students.add(s);
 			}
 		} catch (SQLException e) {
@@ -58,6 +76,7 @@ public class ScoreboardRepository implements Storable<Student> {
 				if (rs.next()) {
 					Student s = new Student(rs.getString("name"), rs.getInt("id"));
 					s.addScore(rs.getInt("score"));
+					loadBadges(s, rs.getString("badges"));
 					return s;
 				}
 			}
@@ -69,12 +88,19 @@ public class ScoreboardRepository implements Storable<Student> {
 
 	@Override
 	public void save(Student student) {
+		List<String> bNames = new ArrayList<>();
+		for (Rewardable b : student.getAllBadges()) {
+			bNames.add(b.getName());
+		}
+		String badgesStr = String.join("||", bNames);
+
 		if (student.getId() == 0) {
-			String sql = "INSERT INTO scoreboard (name, score) VALUES (?, ?)";
+			String sql = "INSERT INTO scoreboard (name, score, badges) VALUES (?, ?, ?)";
 			try (Connection conn = DriverManager.getConnection(DB_URL);
 			     PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 				pstmt.setString(1, student.getName());
 				pstmt.setInt(2, student.getScore());
+				pstmt.setString(3, badgesStr);
 				pstmt.executeUpdate();
 				try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
 					if (generatedKeys.next()) {
@@ -85,12 +111,13 @@ public class ScoreboardRepository implements Storable<Student> {
 				e.printStackTrace();
 			}
 		} else {
-			String sql = "UPDATE scoreboard SET name = ?, score = ? WHERE id = ?";
+			String sql = "UPDATE scoreboard SET name = ?, score = ?, badges = ? WHERE id = ?";
 			try (Connection conn = DriverManager.getConnection(DB_URL);
 			     PreparedStatement pstmt = conn.prepareStatement(sql)) {
 				pstmt.setString(1, student.getName());
 				pstmt.setInt(2, student.getScore());
-				pstmt.setInt(3, student.getId());
+				pstmt.setString(3, badgesStr);
+				pstmt.setInt(4, student.getId());
 				pstmt.executeUpdate();
 			} catch (SQLException e) {
 				e.printStackTrace();

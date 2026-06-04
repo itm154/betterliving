@@ -28,6 +28,6 @@ public class Main {
 		DatabaseSeeder.seed(qsController);
 
 		// Launch GUI
-		SwingUtilities.invokeLater(() -> new MainMenuView(qsController, lmController, qSetController, sbController, true));
+		SwingUtilities.invokeLater(() -> new MainMenuView(qsController, lmController, qSetController, sbController, false));
 	}
 }
