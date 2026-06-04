@@ -2,6 +2,7 @@ package org.betterliving.view;
 
 import org.betterliving.controller.QuizSetController;
 import org.betterliving.controller.QuestionController;
+import org.betterliving.controller.ScoreboardController;
 import org.betterliving.model.QuizSet;
 
 import javax.swing.*;
@@ -12,6 +13,7 @@ import java.util.List;
 public class QuizSetListView extends JFrame {
 	private final QuizSetController quizSetController;
 	private final QuestionController questionController;
+	private final ScoreboardController scoreboardController;
 	private final boolean isTeacher;
 	private JTable table;
 	private DefaultTableModel tableModel;
@@ -19,8 +21,14 @@ public class QuizSetListView extends JFrame {
 
 	public QuizSetListView(QuizSetController quizSetController, QuestionController questionController,
 			boolean isTeacher) {
+		this(quizSetController, questionController, null, isTeacher);
+	}
+
+	public QuizSetListView(QuizSetController quizSetController, QuestionController questionController,
+			ScoreboardController scoreboardController, boolean isTeacher) {
 		this.quizSetController = quizSetController;
 		this.questionController = questionController;
+		this.scoreboardController = scoreboardController;
 		this.isTeacher = isTeacher;
 
 		setTitle("SDG 13: Climate Action - Quiz Sets");
@@ -49,7 +57,6 @@ public class QuizSetListView extends JFrame {
 		JButton manageBtn = new JButton("Manage Quiz Set");
 		JButton createBtn = new JButton("Create New");
 		JButton deleteBtn = new JButton("Delete Selected");
-		JButton closeBtn = new JButton("Close");
 
 		startQuizBtn.addActionListener(e -> startSelectedQuiz());
 		manageBtn.addActionListener(e -> openSelectedQuizSet());
@@ -59,15 +66,14 @@ public class QuizSetListView extends JFrame {
 			new QuizSetView(newSet, isTeacher, this, quizSetController, questionController);
 		});
 		deleteBtn.addActionListener(e -> deleteSelectedQuizSet());
-		closeBtn.addActionListener(e -> dispose());
 
-		actionPanel.add(startQuizBtn);
-		if (isTeacher) {
+		if (!isTeacher) {
+			actionPanel.add(startQuizBtn);
+		} else {
 			actionPanel.add(manageBtn);
 			actionPanel.add(createBtn);
 			actionPanel.add(deleteBtn);
 		}
-		actionPanel.add(closeBtn);
 		add(actionPanel, BorderLayout.SOUTH);
 
 		setVisible(true);
@@ -85,7 +91,18 @@ public class QuizSetListView extends JFrame {
 			JOptionPane.showMessageDialog(this, "This quiz set has no questions yet!");
 			return;
 		}
-		new QuestionView(questionController, selectedSet.getId());
+
+		String username = JOptionPane.showInputDialog(this, "Enter your username to start the quiz:");
+		if (username == null) {
+			return; // User clicked Cancel
+		}
+		username = username.trim();
+		if (username.isEmpty()) {
+			JOptionPane.showMessageDialog(this, "Username cannot be empty. Quiz not started.");
+			return;
+		}
+
+		new QuestionView(questionController, selectedSet.getId(), scoreboardController, username);
 	}
 
 	private void openSelectedQuizSet() {

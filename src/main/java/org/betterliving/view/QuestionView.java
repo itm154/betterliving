@@ -1,6 +1,7 @@
 package org.betterliving.view;
 
 import org.betterliving.controller.QuestionController;
+import org.betterliving.controller.ScoreboardController;
 import org.betterliving.model.question.*;
 
 import javax.swing.*;
@@ -9,6 +10,8 @@ import java.util.List;
 
 public class QuestionView extends JFrame {
 	private final QuestionController controller;
+	private ScoreboardController scoreboardController;
+	private String username;
 	private List<Question> questions;
 	private int currentQuestionIndex = 0;
 	private int totalScore = 0;
@@ -21,11 +24,17 @@ public class QuestionView extends JFrame {
 	private JButton nextBtn;
 
 	public QuestionView(QuestionController controller) {
-		this(controller, 1);
+		this(controller, 1, null, null);
 	}
 
 	public QuestionView(QuestionController controller, int quizSetId) {
+		this(controller, quizSetId, null, null);
+	}
+
+	public QuestionView(QuestionController controller, int quizSetId, ScoreboardController scoreboardController, String username) {
 		this.controller = controller;
+		this.scoreboardController = scoreboardController;
+		this.username = username;
 		this.questions = controller.getQuestionsForQuizSet(quizSetId);
 
 		for (Question q : questions) {
@@ -145,6 +154,10 @@ public class QuestionView extends JFrame {
 		inputPanel.setVisible(true);
 		nextBtn.setVisible(false);
 		questionArea.setText("Quiz Finished!");
+
+		if (scoreboardController != null && username != null && !username.trim().isEmpty()) {
+			scoreboardController.saveScore(username, totalScore);
+		}
 
 		float percentage = questions.isEmpty() ? 0 : ((float) totalCorrect / questions.size()) * 100;
 		String finalMessage = getMotivationalMessage(percentage);

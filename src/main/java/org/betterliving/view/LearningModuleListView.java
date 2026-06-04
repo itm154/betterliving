@@ -44,7 +44,6 @@ public class LearningModuleListView extends JFrame {
 		JButton openBtn = new JButton("Open Selected");
 		JButton createBtn = new JButton("Create New");
 		JButton deleteBtn = new JButton("Delete Selected");
-		JButton closeBtn = new JButton("Close");
 
 		openBtn.addActionListener(e -> openSelectedModule());
 		createBtn.addActionListener(e -> {
@@ -55,14 +54,12 @@ public class LearningModuleListView extends JFrame {
 			}
 		});
 		deleteBtn.addActionListener(e -> deleteSelectedModule());
-		closeBtn.addActionListener(e -> dispose());
 
 		actionPanel.add(openBtn);
 		if (isTeacher) {
 			actionPanel.add(createBtn);
 			actionPanel.add(deleteBtn);
 		}
-		actionPanel.add(closeBtn);
 		add(actionPanel, BorderLayout.SOUTH);
 
 		setVisible(true);
