@@ -81,6 +81,60 @@ public class DatabaseSeeder {
 					"Sustainable Development Goal 13 (SDG 13) calls for urgent action to combat climate change and its impacts. Climate change is a global challenge that disrupts national economies and affects lives, costing people, communities, and countries dearly today and even more tomorrow.",
 					loadImage("intro.png")
 			);
+
+			lmController.addModule(
+					"Impacts of Climate Change",
+					"Climate change leads to rising sea levels, more extreme weather events, and disruptions to ecosystems. It threatens food security, water supply, and human health, particularly in vulnerable communities.",
+					loadImage("second.png")
+			);
+
+			lmController.addModule(
+					"What can be done?",
+					"To combat climate change, we can reduce greenhouse gas emissions by transitioning to renewable energy, improving energy efficiency, and adopting sustainable practices. Additionally, we can support policies that promote climate action and invest in climate adaptation measures.",
+					loadImage("third.png")
+			);
+
+			lmController.addModule(
+					"Who is responsible?",
+					"Everyone has a role to play in addressing climate change. Governments, businesses, and individuals must work together to implement solutions and create a sustainable future for all.",
+					loadImage("fourth.png")
+			);
+
+			lmController.addModule(
+					"How are humans affected?",
+					"Climate change affects human health, livelihoods, and security. It can lead to increased heat-related illnesses, food and water scarcity, displacement due to extreme weather events, and heightened risks of conflict over resources.",
+					loadImage("fifth.png")
+			);
+
+			lmController.addModule(
+					"How about animals?",
+					"Climate change also has significant impacts on wildlife and ecosystems. Species are facing habitat loss, changing migration patterns, and increased vulnerability to diseases and predators.",
+					loadImage("sixth.png")
+			);
+
+			lmController.addModule(
+					"How about the Earth?",
+					"Climate change is causing widespread environmental changes, including melting glaciers, rising sea levels, and shifts in weather patterns. These changes threaten biodiversity and the overall health of our planet.",
+					loadImage("seventh.png")
+			);
+
+			lmController.addModule(
+					"Why should we care?",
+					"Addressing climate change is crucial for the well-being of current and future generations. It is a moral imperative to protect our planet and ensure a sustainable future for all living beings.",
+					loadImage("eight.png")
+			);
+
+			lmController.addModule(
+					"Moral of the story?",
+					"The moral of the story is that we all have a responsibility to take action against climate change for the sake of our planet and future generations.",
+					loadImage("ninth.png")
+			);
+
+			lmController.addModule(
+					"We are the World",
+					"We are the world, we are the children, we are the ones who make a brighter day, so let's start giving. There's a choice we're making, we're saving our own lives. It's true we'll make a better day, just you and me.",
+					loadImage("tenth.png")
+			);
 		}
 	}
 
